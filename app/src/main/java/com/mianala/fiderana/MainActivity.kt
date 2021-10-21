@@ -3,16 +3,24 @@ package com.mianala.fiderana
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -131,69 +139,62 @@ fun Navigation(navController: NavHostController) {
     }
 }
 
+
+val dialPadModifier:Modifier = Modifier
+    .size(72.dp)
+    .clickable { }
+    .clip(CircleShape)
+    .padding(10.dp)
+
+
+@Composable
+fun DialNumber(number:Number){
+    Column(
+        modifier = dialPadModifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = number.toString(), textAlign = TextAlign.Center,fontSize = 36.sp)
+    }
+}
+@Composable
+fun DialPadRow(number:Number){
+    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)){}
+}
+
+
+
 @Composable
 fun DialScreen() {
-    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally) {
-        Row() {
-            Button(onClick = { /*TODO*/ }) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp))  {
 
-                Text(text = "1")
-            }
-            Button(onClick = { /*TODO*/ }) {
-
-                Text(text = "2")
-            }
-            Button(onClick = { /*TODO*/ }) {
-
-                Text(text = "3")
-            }
+            DialNumber(7)
+            DialNumber(8)
+            DialNumber(9)
         }
-        Row() {
-            Button(onClick = { /*TODO*/ }) {
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp))  {
 
-                Text(text = "4")
-            }
-            Button(onClick = { /*TODO*/ }) {
-
-                Text(text = "5")
-            }
-            Button(onClick = { /*TODO*/ }) {
-
-                Text(text = "6")
-            }
+            DialNumber(4)
+            DialNumber(5)
+            DialNumber(6)
         }
-        Row() {
-            Button(onClick = { /*TODO*/ }) {
-
-                Text(text = "7")
-            }
-            Button(onClick = { /*TODO*/ }) {
-
-                Text(text = "8")
-            }
-            Button(onClick = { /*TODO*/ }) {
-
-                Text(text = "9")
-            }
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            DialNumber(1)
+            DialNumber(2)
+            DialNumber(3)
         }
-        Row() {
-            DropdownMenu(expanded = true, onDismissRequest = { /*TODO*/ }) {
-                DropdownMenuItem(onClick = { /*TODO*/ }) {
-                    Text(text = "HF")
-                }
-                DropdownMenuItem(onClick = { /*TODO*/ }) {
-                    Text(text = "FFPM")
-                }
-                DropdownMenuItem(onClick = { /*TODO*/ }) {
-                    Text(text = "FF")
-                }
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp))  {
+            Column(modifier = dialPadModifier, verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "HF", fontSize = 32.sp)
             }
-            Button(onClick = { /*TODO*/ }) {
-
-                Text(text = "2")
-            }
-            Button(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Filled.Check, contentDescription = "Go")
+            DialNumber(0)
+            Column(modifier = dialPadModifier, verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(imageVector = Icons.Filled.Check, contentDescription = "Go", Modifier.size(32.dp))
             }
         }
     }
