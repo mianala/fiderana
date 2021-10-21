@@ -3,19 +3,14 @@ package com.mianala.fiderana
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -140,66 +135,108 @@ fun Navigation(navController: NavHostController) {
 }
 
 
-val dialPadModifier:Modifier = Modifier
-    .size(72.dp)
-    .clickable { }
-    .clip(CircleShape)
-    .padding(10.dp)
-
-
 @Composable
-fun DialNumber(number:Number){
-    Column(
-        modifier = dialPadModifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+fun DialNumber(number: Number) {
+    Button(
+        shape = CircleShape,
+        modifier = Modifier.size(76.dp),
+        onClick = {}
     ) {
-        Text(text = number.toString(), textAlign = TextAlign.Center,fontSize = 36.sp)
+        Text(text = number.toString(), textAlign = TextAlign.Center, fontSize = 36.sp)
     }
 }
-@Composable
-fun DialPadRow(number:Number){
-    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)){}
-}
 
-
-
+@Preview(showBackground = true)
 @Composable
 fun DialScreen() {
+    var dialInput by remember { mutableStateOf("") }
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp))  {
+        Row(horizontalArrangement = Arrangement.Center) {
 
-            DialNumber(7)
-            DialNumber(8)
-            DialNumber(9)
+            OutlinedTextField(
+                value = dialInput,
+                onValueChange = { dialInput = it },
+                label = { Text("Label") }
+            )
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp))  {
-
-            DialNumber(4)
-            DialNumber(5)
-            DialNumber(6)
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            DialNumber(1)
-            DialNumber(2)
-            DialNumber(3)
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp))  {
-            Column(modifier = dialPadModifier, verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "HF", fontSize = 32.sp)
+        Column() {
+            Row(Modifier.padding(10.dp), Arrangement.spacedBy(10.dp)) {
+                Column() {
+                    Text(text = "3")
+                }
+                Column() {
+                    Text(text = "Feno Fiderana")
+                    Text(text = "Key: G")
+                }
+                Button(onClick = { /*TODO*/ }, shape = CircleShape) {
+                    Icon(imageVector = Icons.Filled.PlaylistAdd, contentDescription = "Add to Playlist")
+                }
             }
-            DialNumber(0)
-            Column(modifier = dialPadModifier, verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(imageVector = Icons.Filled.Check, contentDescription = "Go", Modifier.size(32.dp))
+            Row(Modifier.padding(10.dp), Arrangement.spacedBy(10.dp)) {
+                Column() {
+                    Text(text = "3")
+                }
+                Column() {
+                    Text(text = "Feno Fiderana")
+                    Text(text = "Key: G")
+                }
+                Button(onClick = { /*TODO*/ }, shape = CircleShape) {
+                    Icon(imageVector = Icons.Filled.PlaylistAdd, contentDescription = "Add to Playlist")
+                }
+            }
+        }
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(horizontalArrangement = Arrangement.spacedBy(18.dp)) {
+                DialNumber(1)
+                DialNumber(2)
+                DialNumber(3)
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(18.dp)) {
+
+                DialNumber(4)
+                DialNumber(5)
+                DialNumber(6)
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(18.dp)) {
+
+                DialNumber(7)
+                DialNumber(8)
+                DialNumber(9)
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(18.dp)) {
+                Column(
+                    modifier = Modifier.size(76.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = "HF", fontSize = 32.sp)
+                }
+                DialNumber(0)
+                Column(
+                    modifier = Modifier.size(76.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Check,
+                        contentDescription = "Go",
+                        Modifier.size(32.dp)
+                    )
+                }
             }
         }
     }
 }
 // Components
+
 
 @Preview(showBackground = true)
 @Composable
@@ -215,13 +252,6 @@ fun AuthorComponent() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DialPreview() {
-    FideranaTheme {
-        DialScreen()
-    }
-}
 
 @Composable
 fun SongsScreen() {
