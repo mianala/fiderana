@@ -3,9 +3,7 @@ package com.mianala.fiderana
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -93,7 +91,11 @@ fun NavigationBar(
                 selectedContentColor = Color.Red,
                 unselectedContentColor = Color.DarkGray,
                 icon = {
-                    Icon(imageVector = item.icon, contentDescription = item.name, modifier = Modifier.size(32.dp))
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription = item.name,
+                        modifier = Modifier.size(32.dp)
+                    )
                 }
             )
 
@@ -131,11 +133,92 @@ fun Navigation(navController: NavHostController) {
 
 @Composable
 fun DialScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("Dial")
+    Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally) {
+        Row() {
+            Button(onClick = { /*TODO*/ }) {
+
+                Text(text = "1")
+            }
+            Button(onClick = { /*TODO*/ }) {
+
+                Text(text = "2")
+            }
+            Button(onClick = { /*TODO*/ }) {
+
+                Text(text = "3")
+            }
+        }
+        Row() {
+            Button(onClick = { /*TODO*/ }) {
+
+                Text(text = "4")
+            }
+            Button(onClick = { /*TODO*/ }) {
+
+                Text(text = "5")
+            }
+            Button(onClick = { /*TODO*/ }) {
+
+                Text(text = "6")
+            }
+        }
+        Row() {
+            Button(onClick = { /*TODO*/ }) {
+
+                Text(text = "7")
+            }
+            Button(onClick = { /*TODO*/ }) {
+
+                Text(text = "8")
+            }
+            Button(onClick = { /*TODO*/ }) {
+
+                Text(text = "9")
+            }
+        }
+        Row() {
+            DropdownMenu(expanded = true, onDismissRequest = { /*TODO*/ }) {
+                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                    Text(text = "HF")
+                }
+                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                    Text(text = "FFPM")
+                }
+                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                    Text(text = "FF")
+                }
+            }
+            Button(onClick = { /*TODO*/ }) {
+
+                Text(text = "2")
+            }
+            Button(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Filled.Check, contentDescription = "Go")
+            }
+        }
+    }
+}
+// Components
+
+@Preview(showBackground = true)
+@Composable
+fun AuthorComponent() {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box() {
+            Text(text = "RI")
+        }
+        Column {
+            Text("Rija Rasolondraibe")
+            Text("Hira 40")
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DialPreview() {
+    FideranaTheme {
+        DialScreen()
     }
 }
 
@@ -196,13 +279,5 @@ fun AuthorsScreen() {
         contentAlignment = Alignment.Center
     ) {
         Text("Authors")
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    FideranaTheme {
-        AuthorsScreen()
     }
 }
