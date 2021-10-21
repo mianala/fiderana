@@ -3,6 +3,7 @@ package com.mianala.fiderana
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -64,8 +65,11 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             onItemclick = { navController.navigate(it.route) }
                         )
-                    }) {
-                    Navigation(navController = navController)
+                    }) { paddings ->
+                    Box(modifier = Modifier.padding(paddings)) {
+
+                        Navigation(navController = navController)
+                    }
                 }
             }
         }
@@ -91,7 +95,7 @@ fun NavigationBar(
             BottomNavigationItem(
                 selected = selected,
                 onClick = { onItemclick(item) },
-                selectedContentColor = Color.Red,
+                selectedContentColor = MaterialTheme.colors.primaryVariant,
                 unselectedContentColor = Color.DarkGray,
                 icon = {
                     Icon(
@@ -139,10 +143,11 @@ fun Navigation(navController: NavHostController) {
 fun DialNumber(number: Number) {
     Button(
         shape = CircleShape,
-        modifier = Modifier.size(76.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White, contentColor = Color.Black),
+        modifier = Modifier.size(64.dp),
         onClick = {}
     ) {
-        Text(text = number.toString(), textAlign = TextAlign.Center, fontSize = 36.sp)
+        Text(text = number.toString(), textAlign = TextAlign.Center, fontSize = 24.sp)
     }
 }
 
@@ -151,10 +156,13 @@ fun DialNumber(number: Number) {
 fun DialScreen() {
     var dialInput by remember { mutableStateOf("") }
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally,
+
+        ) {
         Row(horizontalArrangement = Arrangement.Center) {
 
             OutlinedTextField(
@@ -165,70 +173,77 @@ fun DialScreen() {
         }
         Column() {
             Row(Modifier.padding(10.dp), Arrangement.spacedBy(10.dp)) {
-                Column() {
-                    Text(text = "3")
+                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = "3", fontSize = 48.sp)
                 }
                 Column() {
                     Text(text = "Feno Fiderana")
                     Text(text = "Key: G")
                 }
                 Button(onClick = { /*TODO*/ }, shape = CircleShape) {
-                    Icon(imageVector = Icons.Filled.PlaylistAdd, contentDescription = "Add to Playlist")
+                    Icon(
+                        imageVector = Icons.Filled.PlaylistAdd,
+                        contentDescription = "Add to Playlist"
+                    )
                 }
             }
             Row(Modifier.padding(10.dp), Arrangement.spacedBy(10.dp)) {
-                Column() {
-                    Text(text = "3")
+                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = "3", fontSize = 48.sp)
                 }
                 Column() {
                     Text(text = "Feno Fiderana")
                     Text(text = "Key: G")
                 }
                 Button(onClick = { /*TODO*/ }, shape = CircleShape) {
-                    Icon(imageVector = Icons.Filled.PlaylistAdd, contentDescription = "Add to Playlist")
+                    Icon(
+                        imageVector = Icons.Filled.PlaylistAdd,
+                        contentDescription = "Add to Playlist"
+                    )
                 }
             }
         }
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(18.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
                 DialNumber(1)
                 DialNumber(2)
                 DialNumber(3)
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(18.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
 
                 DialNumber(4)
                 DialNumber(5)
                 DialNumber(6)
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(18.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
 
                 DialNumber(7)
                 DialNumber(8)
                 DialNumber(9)
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(18.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
                 Column(
                     modifier = Modifier.size(76.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "HF", fontSize = 32.sp)
+                    Text(text = "HF", fontSize = 24.sp)
                 }
                 DialNumber(0)
                 Column(
-                    modifier = Modifier.size(76.dp),
+                    modifier = Modifier.size(64.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Check,
+                        tint = MaterialTheme.colors.secondary,
                         contentDescription = "Go",
-                        Modifier.size(32.dp)
+                        modifier = Modifier.size(32.dp)
                     )
                 }
             }
