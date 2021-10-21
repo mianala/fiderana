@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -92,7 +93,7 @@ fun NavigationBar(
                 selectedContentColor = Color.Red,
                 unselectedContentColor = Color.DarkGray,
                 icon = {
-                    Icon(imageVector = item.icon, contentDescription = item.name)
+                    Icon(imageVector = item.icon, contentDescription = item.name, modifier = Modifier.size(32.dp))
                 }
             )
 
