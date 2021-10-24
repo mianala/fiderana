@@ -602,9 +602,6 @@ fun CategoryScreen() {
                         text = "Fiderana sy Fanandratana",
                         style = MaterialTheme.typography.h6,
                     )
-                    Text{
-                        
-                    }
                     Text(
                         text = "Hira 50",
                         style = MaterialTheme.typography.caption,
