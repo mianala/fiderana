@@ -3,7 +3,9 @@ package com.mianala.fiderana
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +17,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -165,7 +169,6 @@ fun DialNumber(number: Number) {
     }
 }
 
-@Preview(showBackground = true)
 @ExperimentalMaterialApi
 @Composable
 fun DialScreen() {
@@ -234,7 +237,8 @@ fun DialScreen() {
                         Column(
                             Modifier
                                 .padding(12.dp, 0.dp)
-                                .weight(1f)) {
+                                .weight(1f)
+                        ) {
                             Text(
                                 text = "Feno Fiderana",
                                 style = MaterialTheme.typography.subtitle1,
@@ -412,7 +416,6 @@ fun AuthorComponent() {
 }
 
 
-@Preview(showBackground = true)
 @ExperimentalMaterialApi
 @Composable
 fun SongsScreen() {
@@ -424,7 +427,7 @@ fun SongsScreen() {
         Alignment.CenterHorizontally
     ) {
         Row(
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             OutlinedTextField(value = "", onValueChange = {},
@@ -465,11 +468,11 @@ fun SongsScreen() {
                     Column(
                         Modifier
                             .padding(12.dp, 0.dp)
-                            .weight(1f)) {
+                            .weight(1f)
+                    ) {
                         Text(
                             text = "Feno Fiderana",
-                            style = MaterialTheme.typography.subtitle1,
-                            fontWeight = FontWeight.Bold
+                            style = MaterialTheme.typography.body1,
                         )
                         Text(text = "Key: G", style = MaterialTheme.typography.caption)
                     }
@@ -500,9 +503,8 @@ fun SongsScreen() {
 
                     Column(Modifier.padding(12.dp, 0.dp)) {
                         Text(
-                            text = "Injay Tompo O Ilay Feonao",
-                            style = MaterialTheme.typography.subtitle1,
-                            fontWeight = FontWeight.Bold
+                            text = "Injay Tompo o Ilay Feonao",
+                            style = MaterialTheme.typography.body1,
                         )
                         Text(text = "Rija Rasolondraibe", style = MaterialTheme.typography.caption)
                     }
@@ -533,8 +535,7 @@ fun SongsScreen() {
                     Column(Modifier.padding(12.dp, 0.dp)) {
                         Text(
                             text = "Rija Rasolondraibe",
-                            style = MaterialTheme.typography.subtitle1,
-                            fontWeight = FontWeight.Bold
+                            style = MaterialTheme.typography.body1,
                         )
                         Text(text = "Hira 59", style = MaterialTheme.typography.caption)
                     }
@@ -570,36 +571,51 @@ fun PlaylistScreen() {
 @Preview(showBackground = true)
 @Composable
 fun CategoryScreen() {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(24.dp)) {
-        Card(
-            shape = RoundedCornerShape(8.dp),
-            backgroundColor = Color.Cyan,
-            onClick = {},
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(10.dp, 24.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp,32.dp)
+    ) {
 
-                Column(Modifier.padding(12.dp, 0.dp)) {
+        Box(
+            modifier = Modifier
+                .padding(10.dp)
+                .background(Color.Cyan, shape = RoundedCornerShape(8.dp)).clickable {  }
+        ) {
+            Image(
+                modifier = Modifier
+                    .width(224.dp)
+                    .align(alignment = Alignment.TopEnd)
+                    .offset(y = -88.dp, x = 50.dp),
+                painter = painterResource(id = R.drawable.ic_pray),
+                contentDescription = null,
+            )
+            Box(modifier = Modifier.wrapContentHeight()) {
+
+                Column(
+                    Modifier
+                        .padding(24.dp)
+                        .padding(end = 100.dp)
+                        , verticalArrangement = Arrangement.SpaceEvenly
+                ) {
                     Text(
                         text = "Fiderana sy Fanandratana",
                         style = MaterialTheme.typography.h6,
-                        fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "Lorem Ipsum, dolor sit amet set amor te a" +
-                                "mo di asking you to be super honest and aggress",
-                        style = MaterialTheme.typography.body1,
-                        modifier = Modifier.padding(12.dp)
+                        text = "Hira 50",
+                        style = MaterialTheme.typography.caption,
+                        modifier = Modifier
+                            .padding(0.dp,10.dp)
                     )
-                    Text(text = "Hira 60", style = MaterialTheme.typography.caption)
+                    Text(
+                        text = "Fo midera an'Andriamanitra ary mifaly aminy",
+                        style = MaterialTheme.typography.body2,
+                    )
+
                 }
             }
+
         }
     }
 }
