@@ -548,6 +548,7 @@ fun SongsScreen() {
 }
 
 @Composable
+@Preview(showBackground = true)
 fun SongScreen() {
     Column{
         Text(text = "Title", style = MaterialTheme.typography.h3)
@@ -568,7 +569,6 @@ fun PlaylistScreen() {
 }
 
 @ExperimentalMaterialApi
-@Preview(showBackground = true)
 @Composable
 fun CategoryScreen() {
     Column(
