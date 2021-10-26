@@ -549,11 +549,11 @@ fun SongsScreen() {
 
 @Composable
 fun SongScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("Song")
+    Column{
+        Text(text = "Title", style = MaterialTheme.typography.h3)
+        Text(text = "Hira 59", style = MaterialTheme.typography.caption)
+        Text(text = "Key G")
+        Text(text = "lorem lorem")
     }
 }
 
