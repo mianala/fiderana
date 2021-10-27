@@ -554,7 +554,21 @@ fun SongScreen() {
         Text(text = "Title", style = MaterialTheme.typography.h3)
         Text(text = "Hira 59", style = MaterialTheme.typography.caption)
         Text(text = "Key G")
-        Text(text = "lorem lorem")
+        Text(text = "Tsy moramora ny mankatoa 
+        Manefy ny sitrapo 
+        Manda ny tena koa")
+        Text(text = "Tsy moramora ny mankatoa 
+        Manefy ny sitrapo 
+        Manda ny tena koa")
+        Text(text = "Tsy moramora ny mankatoa 
+        Manefy ny sitrapo 
+        Manda ny tena koa")
+        Text(text = "Tsy moramora ny mankatoa 
+        Manefy ny sitrapo 
+        Manda ny tena koa")
+        Text(text = "Tsy moramora ny mankatoa 
+        Manefy ny sitrapo 
+        Manda ny tena koa")
     }
 }
 
