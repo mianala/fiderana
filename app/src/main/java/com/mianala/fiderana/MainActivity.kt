@@ -550,7 +550,7 @@ fun SongsScreen() {
 @Composable
 @Preview(showBackground = true)
 fun SongScreen() {
-    Column(modifier = Modifier.fillMaxWidth()){
+    Column(modifier = Modifier.fillMaxWidth(), Arrangement.spacedBy(10.dp)){
         Text(text = "Title", style = MaterialTheme.typography.h3)
         Text(text = "Hira 59", style = MaterialTheme.typography.caption)
         Text(text = "Key G")
