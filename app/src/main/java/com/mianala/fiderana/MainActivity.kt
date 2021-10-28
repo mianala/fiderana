@@ -552,8 +552,7 @@ fun SongsScreen() {
 fun SongScreen() {
     Column(modifier = Modifier.fillMaxWidth(), Arrangement.spacedBy(10.dp)){
         Text(text = "Title", style = MaterialTheme.typography.h3)
-        Text(text = "Hira 59", style = MaterialTheme.typography.caption)
-        Text(text = "Key G")
+        Text(text = "HN5 - T130", style = MaterialTheme.typography.caption)
         Text(text = "Tsy moramora ny mankatoa " +
                 "\n Manefy ny sitrapo " +
                 "\n Manda ny tena koa")
