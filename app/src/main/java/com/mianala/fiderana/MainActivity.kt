@@ -550,7 +550,7 @@ fun SongsScreen() {
 @Composable
 @Preview(showBackground = true)
 fun SongScreen() {
-    Column(modifier = Modifier.fillMaxWidth(), Arrangement.spacedBy(10.dp)){
+    Column(modifier = Modifier.fillMaxWidth().padding(20.dp), Arrangement.spacedBy(10.dp)){
         Text(text = "Title", style = MaterialTheme.typography.h3)
         Text(text = "HN5 - T130", style = MaterialTheme.typography.caption)
         Text(text = "Tsy moramora ny mankatoa " +
