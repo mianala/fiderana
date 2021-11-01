@@ -550,34 +550,54 @@ fun SongsScreen() {
 @Composable
 @Preview(showBackground = true)
 fun SongScreen() {
-    Column(modifier = Modifier.fillMaxWidth().padding(20.dp), Arrangement.spacedBy(10.dp)){
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(20.dp), Arrangement.spacedBy(10.dp)){
         Text(text = "Title", style = MaterialTheme.typography.h3)
         Text(text = "HN5 - T130", style = MaterialTheme.typography.caption)
         Text(text = "Tsy moramora ny mankatoa " +
                 "\n Manefy ny sitrapo " +
-                "\n Manda ny tena koa")
+                "\n Manda ny tena koa", style = MaterialTheme.typography.body1)
         Text(text = "Tsy moramora ny mankatoa " +
                 "\n Manefy ny sitrapo " +
-                "\n Manda ny tena koa")
+                "\n Manda ny tena koa", style = MaterialTheme.typography.body1)
         Text(text = "Tsy moramora ny mankatoa " +
                 "\n Manefy ny sitrapo " +
-                "\n Manda ny tena koa")
+                "\n Manda ny tena koa", style = MaterialTheme.typography.body1)
         Text(text = "Tsy moramora ny mankatoa " +
                 "\n Manefy ny sitrapo " +
-                "\n Manda ny tena koa")
+                "\n Manda ny tena koa", style = MaterialTheme.typography.body1)
         Text(text = "Tsy moramora ny mankatoa " +
                 "\n Manefy ny sitrapo " +
-                "\n Manda ny tena koa")
+                "\n Manda ny tena koa", style = MaterialTheme.typography.body1)
     }
 }
 
+@Preview(showBackground = true)
 @Composable
 fun PlaylistScreen() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text("Playlist")
+        Column() {
+            Row{
+                Column(
+                    Modifier
+                        .padding(12.dp, 0.dp)
+                        .weight(1f)
+                ) {
+                    Text(
+                        text = "Feno Fiderana",
+                        style = MaterialTheme.typography.subtitle1,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(text = "Key: G", style = MaterialTheme.typography.caption)
+                }
+
+
+            }
+        }
     }
 }
 
@@ -587,13 +607,14 @@ fun CategoryScreen() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp,32.dp)
+            .padding(12.dp, 32.dp)
     ) {
 
         Box(
             modifier = Modifier
                 .padding(10.dp)
-                .background(Color.Cyan, shape = RoundedCornerShape(8.dp)).clickable {  }
+                .background(Color.Cyan, shape = RoundedCornerShape(8.dp))
+                .clickable { }
         ) {
             Image(
                 modifier = Modifier
