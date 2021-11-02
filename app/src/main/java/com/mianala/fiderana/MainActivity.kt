@@ -712,11 +712,23 @@ fun CategoryScreen() {
 
 @Composable
 fun SettingsScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("Settings")
+    Column{
+        Row{
+            Button{
+                Icon(icon = Icon.Filled.ArrowBackward)
+            }
+        }
+        Column{
+            Row{
+                Text(text = "Pejy Fanombohana")
+            }
+            Row{
+                Text(text = "Fihirana Fanombohana")
+            }
+            Row{
+                Text(text = "Fiverenana isan'andininy")
+            }
+        }
     }
 }
 
