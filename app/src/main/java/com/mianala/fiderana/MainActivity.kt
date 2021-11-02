@@ -27,6 +27,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -34,8 +38,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mianala.fiderana.ui.theme.FideranaTheme
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class MainActivity : ComponentActivity() {
+
     @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -148,9 +155,23 @@ fun Navigation(navController: NavHostController) {
     }
 }
 
+class Dial : ViewModel() {
+    private val _inputFlow = MutableStateFlow<Int>(0)
+    val inputFlow: StateFlow<Int> = _inputFlow
+
+    fun type(num: Int) {
+        val newNumber = (_inputFlow.value.toString() + num.toString()).toInt()
+        if (newNumber > 999) return
+        _inputFlow.value = newNumber
+    }
+
+    fun reset() {
+        _inputFlow.value = 0
+    }
+}
 
 @Composable
-fun DialNumber(number: Number) {
+fun DialNumber(n: Int, dialViewModel: Dial = viewModel()) {
     Button(
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
@@ -158,10 +179,10 @@ fun DialNumber(number: Number) {
             contentColor = Color.Black
         ),
         modifier = Modifier.size(64.dp),
-        onClick = {dialInput.value = dialInput + number.toString()}
+        onClick = { dialViewModel.type(n) }
     ) {
         Text(
-            text = number.toString(),
+            text = n.toString(),
             textAlign = TextAlign.Center,
             fontSize = 24.sp,
             fontWeight = FontWeight.Light
@@ -170,9 +191,11 @@ fun DialNumber(number: Number) {
 }
 
 @ExperimentalMaterialApi
+@Preview(showBackground = true)
 @Composable
-fun DialScreen() {
-    var dialInput by remember { mutableStateOf("") }
+fun DialScreen(dialViewModel: Dial = viewModel()) {
+    val dialInput by dialViewModel.inputFlow.collectAsState()
+
     Column {
 
         Row(
@@ -201,17 +224,10 @@ fun DialScreen() {
 
             ) {
 
-
             Row(horizontalArrangement = Arrangement.Center) {
-
-                OutlinedTextField(
-                    value = dialInput, readOnly = true,
-                    // onValueChange = { dialInput = it },
-                    label = { Text("Hira") }
-                    trailingIcon = {Icon(Icons.Filled.Backspace, contentDescription = "Clear", modifier = Modifier.offset(x= 10.dp).clickable { dialInput.value = ""})}
-                )
+                if (dialInput > 0){
+                Text(dialInput.toString(), style = MaterialTheme.typography.h3)}
             }
-
             Column(Modifier.padding(32.dp, 24.dp), Arrangement.spacedBy(14.dp)) {
 
                 Card(
@@ -316,38 +332,58 @@ fun DialScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
-                    DialNumber(1)
-                    DialNumber(2)
-                    DialNumber(3)
+                    DialNumber(
+                        1
+                    )
+                    DialNumber(
+                        2
+                    )
+                    DialNumber(
+                        3
+                    )
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
 
-                    DialNumber(4)
-                    DialNumber(5)
-                    DialNumber(6)
+                    DialNumber(
+                        4
+                    )
+                    DialNumber(
+                        5
+                    )
+                    DialNumber(
+                        6
+                    )
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
 
-                    DialNumber(7)
-                    DialNumber(8)
-                    DialNumber(9)
+                    DialNumber(
+                        7
+                    )
+                    DialNumber(
+                        8
+                    )
+                    DialNumber(
+                        9
+                    )
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
 
                     Button(
                         modifier = Modifier.size(64.dp),
-                        onClick = {},
+                        onClick = {dialViewModel.reset()},
                         elevation = null,
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.Search,
+                            imageVector = Icons.Filled.Refresh,
                             contentDescription = "Go",
                             modifier = Modifier.size(32.dp)
                         )
                     }
-                    DialNumber(0)
+                    DialNumber(
+                        0
+                    )
                     Button(
                         modifier = Modifier.size(64.dp),
                         onClick = {},
@@ -400,7 +436,6 @@ fun DialScreen() {
             }
         }
     }
-
 }
 
 @Composable
@@ -439,7 +474,10 @@ fun SongsScreen() {
                 elevation = null,
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
             ) {
-                Icon(imageVector = Icons.Filled.MoreHoriz, contentDescription = "Add to playlist")
+                Icon(
+                    imageVector = Icons.Filled.MoreHoriz,
+                    contentDescription = "Add to playlist"
+                )
             }
         }
         Column(
@@ -507,7 +545,10 @@ fun SongsScreen() {
                             text = "Injay Tompo o Ilay Feonao",
                             style = MaterialTheme.typography.body1,
                         )
-                        Text(text = "Rija Rasolondraibe", style = MaterialTheme.typography.caption)
+                        Text(
+                            text = "Rija Rasolondraibe",
+                            style = MaterialTheme.typography.caption
+                        )
                     }
                     Button(
                         onClick = { /*TODO*/ },
@@ -551,33 +592,44 @@ fun SongsScreen() {
 @Composable
 @Preview(showBackground = true)
 fun SongScreen() {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(20.dp), Arrangement.spacedBy(10.dp)){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp), Arrangement.spacedBy(10.dp)
+    ) {
         Text(text = "Title", style = MaterialTheme.typography.h3)
         Text(text = "HN5 - T130", style = MaterialTheme.typography.caption)
-        Text(text = "Tsy moramora ny mankatoa " +
-                "\n Manefy ny sitrapo " +
-                "\n Manda ny tena koa", style = MaterialTheme.typography.body1)
-        Text(text = "Tsy moramora ny mankatoa " +
-                "\n Manefy ny sitrapo " +
-                "\n Manda ny tena koa", style = MaterialTheme.typography.body1)
-        Text(text = "Tsy moramora ny mankatoa " +
-                "\n Manefy ny sitrapo " +
-                "\n Manda ny tena koa", style = MaterialTheme.typography.body1)
-        Text(text = "Tsy moramora ny mankatoa " +
-                "\n Manefy ny sitrapo " +
-                "\n Manda ny tena koa", style = MaterialTheme.typography.body1)
-        Text(text = "Tsy moramora ny mankatoa " +
-                "\n Manefy ny sitrapo " +
-                "\n Manda ny tena koa", style = MaterialTheme.typography.body1)
+        Text(
+            text = "Tsy moramora ny mankatoa " +
+                    "\n Manefy ny sitrapo " +
+                    "\n Manda ny tena koa", style = MaterialTheme.typography.body1
+        )
+        Text(
+            text = "Tsy moramora ny mankatoa " +
+                    "\n Manefy ny sitrapo " +
+                    "\n Manda ny tena koa", style = MaterialTheme.typography.body1
+        )
+        Text(
+            text = "Tsy moramora ny mankatoa " +
+                    "\n Manefy ny sitrapo " +
+                    "\n Manda ny tena koa", style = MaterialTheme.typography.body1
+        )
+        Text(
+            text = "Tsy moramora ny mankatoa " +
+                    "\n Manefy ny sitrapo " +
+                    "\n Manda ny tena koa", style = MaterialTheme.typography.body1
+        )
+        Text(
+            text = "Tsy moramora ny mankatoa " +
+                    "\n Manefy ny sitrapo " +
+                    "\n Manda ny tena koa", style = MaterialTheme.typography.body1
+        )
     }
 }
 
-@Preview(showBackground = true)
 @Composable
 fun PlaylistScreen() {
-    Column{
+    Column {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -592,29 +644,32 @@ fun PlaylistScreen() {
                 elevation = null,
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
             ) {
-                Icon(imageVector = Icons.Filled.MoreHoriz, contentDescription = "Add to playlist")
+                Icon(
+                    imageVector = Icons.Filled.MoreHoriz,
+                    contentDescription = "Add to playlist"
+                )
             }
         }
         Column(modifier = Modifier.fillMaxSize()) {
-            Row{
+            Row {
                 Button(
-                        modifier = Modifier.size(64.dp),
-                        onClick = {},
-                        elevation = null,
-                        shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.DragHandle,
-                            tint = MaterialTheme.colors.secondary,
-                            contentDescription = "Go",
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
+                    modifier = Modifier.size(64.dp),
+                    onClick = {},
+                    elevation = null,
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.DragHandle,
+                        tint = MaterialTheme.colors.secondary,
+                        contentDescription = "Go",
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
                 Column(
                     Modifier
                         .padding(12.dp, 0.dp)
-                        .weight(1f)
+                        .weight(1f), Arrangement.Center
                 ) {
                     Text(
                         text = "Feno Fiderana",
@@ -625,34 +680,34 @@ fun PlaylistScreen() {
                 }
 
                 Button(
-                        modifier = Modifier.size(64.dp),
-                        onClick = {},
-                        elevation = null,
-                        shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.PlayCircle,
-                            tint = MaterialTheme.colors.secondary,
-                            contentDescription = "Play",
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
+                    modifier = Modifier.size(64.dp),
+                    onClick = {},
+                    elevation = null,
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.PlayCircle,
+                        tint = MaterialTheme.colors.secondary,
+                        contentDescription = "Play",
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
 
                 Button(
-                        modifier = Modifier.size(64.dp),
-                        onClick = {},
-                        elevation = null,
-                        shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.RemoveCircle,
-                            tint = MaterialTheme.colors.secondary,
-                            contentDescription = "Go",
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
+                    modifier = Modifier.size(64.dp),
+                    onClick = {},
+                    elevation = null,
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.RemoveCircle,
+                        tint = MaterialTheme.colors.secondary,
+                        contentDescription = "Go",
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
             }
         }
     }
@@ -686,8 +741,7 @@ fun CategoryScreen() {
                 Column(
                     Modifier
                         .padding(24.dp)
-                        .padding(end = 100.dp)
-                        , verticalArrangement = Arrangement.SpaceEvenly
+                        .padding(end = 100.dp), verticalArrangement = Arrangement.SpaceEvenly
                 ) {
                     Text(
                         text = "Fiderana sy Fanandratana",
@@ -697,7 +751,7 @@ fun CategoryScreen() {
                         text = "Hira 50",
                         style = MaterialTheme.typography.caption,
                         modifier = Modifier
-                            .padding(0.dp,10.dp)
+                            .padding(0.dp, 10.dp)
                     )
                     Text(
                         text = "Fo midera an'Andriamanitra ary mifaly aminy",
@@ -713,20 +767,20 @@ fun CategoryScreen() {
 
 @Composable
 fun SettingsScreen() {
-    Column{
-        Row{
-            Button{
-                Icon(icon = Icon.Filled.ArrowBackward)
+    Column {
+        Row {
+            Button(onClick = {}) {
+                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
             }
         }
-        Column{
-            Row{
+        Column {
+            Row {
                 Text(text = "Pejy Fanombohana")
             }
-            Row{
+            Row {
                 Text(text = "Fihirana Fanombohana")
             }
-            Row{
+            Row {
                 Text(text = "Fiverenana isan'andininy")
             }
         }
