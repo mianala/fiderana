@@ -576,12 +576,40 @@ fun SongScreen() {
 @Preview(showBackground = true)
 @Composable
 fun PlaylistScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column() {
+    Column{
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Button(
+                onClick = { /*TODO*/ },
+                shape = CircleShape,
+                elevation = null,
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+            ) {
+                Icon(imageVector = Icons.Filled.MoreHoriz, contentDescription = "Add to playlist")
+            }
+        }
+        Column(modifier = Modifier.fillMaxSize()) {
             Row{
+                Button(
+                        modifier = Modifier.size(64.dp),
+                        onClick = {},
+                        elevation = null,
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.DragHandle,
+                            tint = MaterialTheme.colors.secondary,
+                            contentDescription = "Go",
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
                 Column(
                     Modifier
                         .padding(12.dp, 0.dp)
@@ -595,7 +623,35 @@ fun PlaylistScreen() {
                     Text(text = "Key: G", style = MaterialTheme.typography.caption)
                 }
 
+                Button(
+                        modifier = Modifier.size(64.dp),
+                        onClick = {},
+                        elevation = null,
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.PlayCircle,
+                            tint = MaterialTheme.colors.secondary,
+                            contentDescription = "Play",
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
 
+                Button(
+                        modifier = Modifier.size(64.dp),
+                        onClick = {},
+                        elevation = null,
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.RemoveCircle,
+                            tint = MaterialTheme.colors.secondary,
+                            contentDescription = "Go",
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
             }
         }
     }
