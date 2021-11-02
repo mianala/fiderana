@@ -158,7 +158,7 @@ fun DialNumber(number: Number) {
             contentColor = Color.Black
         ),
         modifier = Modifier.size(64.dp),
-        onClick = {}
+        onClick = {dialInput.value = dialInput + number.toString()}
     ) {
         Text(
             text = number.toString(),
@@ -206,8 +206,9 @@ fun DialScreen() {
 
                 OutlinedTextField(
                     value = dialInput, readOnly = true,
-                    onValueChange = { dialInput = it },
+                    // onValueChange = { dialInput = it },
                     label = { Text("Hira") }
+                    trailingIcon = {Icon(Icons.Filled.Backspace, contentDescription = "Clear", modifier = Modifier.offset(x= 10.dp).clickable { dialInput.value = ""})}
                 )
             }
 
