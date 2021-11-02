@@ -714,6 +714,7 @@ fun PlaylistScreen() {
 }
 
 @ExperimentalMaterialApi
+@Preview(showBackground = true)
 @Composable
 fun CategoryScreen() {
     Column(
@@ -725,7 +726,7 @@ fun CategoryScreen() {
         Box(
             modifier = Modifier
                 .padding(10.dp)
-                .background(Color.Cyan, shape = RoundedCornerShape(8.dp))
+                .background(Color.Cyan, shape = RoundedCornerShape(8.dp)).height(IntrinsicSize.Min)
                 .clickable { }
         ) {
             Image(
