@@ -3,9 +3,7 @@ package com.mianala.fiderana
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -130,7 +129,7 @@ fun NavigationBar(
 @ExperimentalMaterialApi
 @Composable
 fun Navigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "category") {
+    NavHost(navController = navController, startDestination = "dial") {
         composable("dial") {
             DialScreen()
         }
@@ -196,7 +195,10 @@ fun DialNumber(n: Int, dialViewModel: Dial = viewModel()) {
 fun DialScreen(dialViewModel: Dial = viewModel()) {
     val dialInput by dialViewModel.inputFlow.collectAsState()
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
 
         Row(
             modifier = Modifier
@@ -217,18 +219,23 @@ fun DialScreen(dialViewModel: Dial = viewModel()) {
         }
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(0.dp, 20.dp),
+                .padding(0.dp, 20.dp)
+                .weight(1.0f),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally,
 
             ) {
 
             Row(horizontalArrangement = Arrangement.Center) {
-                if (dialInput > 0){
-                Text(dialInput.toString(), style = MaterialTheme.typography.h3)}
+                Text(dialInput.toString(), style = MaterialTheme.typography.h4)
             }
-            Column(Modifier.padding(32.dp, 24.dp), Arrangement.spacedBy(14.dp)) {
+            Column(
+                Modifier
+                    .padding(32.dp, 24.dp)
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+                    .wrapContentHeight(), Arrangement.spacedBy(14.dp)
+            ) {
 
                 Card(
                     shape = RoundedCornerShape(8.dp),
@@ -276,53 +283,55 @@ fun DialScreen(dialViewModel: Dial = viewModel()) {
                         }
                     }
                 }
+                for (i in 1..5) {
+                    Card(
+                        shape = RoundedCornerShape(8.dp),
+                        onClick = {},
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .padding(10.dp, 10.dp)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
 
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    onClick = {},
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(10.dp, 10.dp)
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                            ) {
 
-                        ) {
-
-                        Column(
-                            Modifier
-                                .padding(12.dp, 0.dp),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(text = "385", fontSize = 28.sp)
-                        }
-                        Column(
-                            Modifier
-                                .padding(12.dp, 0.dp)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "Injay Tompo o Ilay Feonao",
-                                style = MaterialTheme.typography.subtitle1,
-                                fontWeight = FontWeight.Bold,
-                            )
-                            Text(text = "Key: G", style = MaterialTheme.typography.caption)
-                        }
-                        Button(
-                            onClick = { /*TODO*/ },
-                            elevation = null,
-                            shape = CircleShape,
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.PlaylistAdd,
-                                contentDescription = "Add to Playlist"
-                            )
+                            Column(
+                                Modifier
+                                    .padding(12.dp, 0.dp),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(text = "385", fontSize = 28.sp)
+                            }
+                            Column(
+                                Modifier
+                                    .padding(12.dp, 0.dp)
+                                    .weight(1f)
+                            ) {
+                                Text(
+                                    text = "Injay Tompo o Ilay Feonao",
+                                    style = MaterialTheme.typography.subtitle1,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                                Text(text = "Key: G", style = MaterialTheme.typography.caption)
+                            }
+                            Button(
+                                onClick = { /*TODO*/ },
+                                elevation = null,
+                                shape = CircleShape,
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.PlaylistAdd,
+                                    contentDescription = "Add to Playlist"
+                                )
+                            }
                         }
                     }
                 }
+
             }
 
 
@@ -370,7 +379,7 @@ fun DialScreen(dialViewModel: Dial = viewModel()) {
 
                     Button(
                         modifier = Modifier.size(64.dp),
-                        onClick = {dialViewModel.reset()},
+                        onClick = { dialViewModel.reset() },
                         elevation = null,
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
@@ -399,39 +408,39 @@ fun DialScreen(dialViewModel: Dial = viewModel()) {
                         )
                     }
                 }
-            }
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.padding(0.dp, 10.dp)
-            ) {
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                    elevation = null
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.padding(0.dp, 10.dp)
                 ) {
-                    Text(text = "HF", fontWeight = FontWeight.Black)
-                }
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                    elevation = null
-                ) {
-                    Text(text = "FFPM")
-                }
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                    elevation = null
-                ) {
-                    Text(text = "FF")
-                }
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                    elevation = null
-                ) {
-                    Text(text = "Antema")
+                    Button(
+                        onClick = { /*TODO*/ },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                        elevation = null
+                    ) {
+                        Text(text = "HF", fontWeight = FontWeight.Black)
+                    }
+                    Button(
+                        onClick = { /*TODO*/ },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                        elevation = null
+                    ) {
+                        Text(text = "FFPM")
+                    }
+                    Button(
+                        onClick = { /*TODO*/ },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                        elevation = null
+                    ) {
+                        Text(text = "FF")
+                    }
+                    Button(
+                        onClick = { /*TODO*/ },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                        elevation = null
+                    ) {
+                        Text(text = "Antema")
+                    }
                 }
             }
         }
@@ -481,105 +490,114 @@ fun SongsScreen() {
             }
         }
         Column(
+            Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+                .wrapContentHeight(),
             verticalArrangement = Arrangement.spacedBy(14.dp),
 
             ) {
-
-            Card(
-                shape = RoundedCornerShape(8.dp),
-                onClick = {},
-            ) {
-                Row(
-                    modifier = Modifier
-                        .padding(10.dp, 10.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+            for (i in 1..5) {
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    onClick = {},
                 ) {
+                    Row(
+                        modifier = Modifier
+                            .padding(10.dp, 10.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
 
-                    Column(
-                        Modifier.padding(12.dp, 0.dp),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(text = "3", fontSize = 28.sp)
-                    }
-                    Column(
-                        Modifier
-                            .padding(12.dp, 0.dp)
-                            .weight(1f)
-                    ) {
-                        Text(
-                            text = "Feno Fiderana",
-                            style = MaterialTheme.typography.body1,
-                        )
-                        Text(text = "Key: G", style = MaterialTheme.typography.caption)
-                    }
-                    Button(
-                        onClick = { /*TODO*/ },
-                        elevation = null,
-                        shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.PlaylistAdd,
-                            contentDescription = "Add to Playlist"
-                        )
+                        Column(
+                            Modifier.padding(12.dp, 0.dp),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(text = "3", fontSize = 28.sp)
+                        }
+                        Column(
+                            Modifier
+                                .padding(12.dp, 0.dp)
+                                .weight(1f)
+                        ) {
+                            Text(
+                                text = "Feno Fiderana",
+                                style = MaterialTheme.typography.body1,
+                            )
+                            Text(text = "Key: G", style = MaterialTheme.typography.caption)
+                        }
+                        Button(
+                            onClick = { /*TODO*/ },
+                            elevation = null,
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.PlaylistAdd,
+                                contentDescription = "Add to Playlist"
+                            )
+                        }
                     }
                 }
             }
-            Card(
-                shape = RoundedCornerShape(8.dp),
-                onClick = {},
-            ) {
-                Row(
-                    modifier = Modifier
-                        .padding(10.dp, 10.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+            for (i in 1..5) {
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    onClick = {},
                 ) {
-
-                    Column(Modifier.padding(12.dp, 0.dp)) {
-                        Text(
-                            text = "Injay Tompo o Ilay Feonao",
-                            style = MaterialTheme.typography.body1,
-                        )
-                        Text(
-                            text = "Rija Rasolondraibe",
-                            style = MaterialTheme.typography.caption
-                        )
-                    }
-                    Button(
-                        onClick = { /*TODO*/ },
-                        elevation = null,
-                        shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                    Row(
+                        modifier = Modifier
+                            .padding(10.dp, 10.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.PlaylistAdd,
-                            contentDescription = "Add to Playlist"
-                        )
+
+                        Column(Modifier.padding(12.dp, 0.dp)) {
+                            Text(
+                                text = "Injay Tompo o Ilay Feonao",
+                                style = MaterialTheme.typography.body1,
+                            )
+                            Text(
+                                text = "Rija Rasolondraibe",
+                                style = MaterialTheme.typography.caption
+                            )
+                        }
+                        Button(
+                            onClick = { /*TODO*/ },
+                            elevation = null,
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.PlaylistAdd,
+                                contentDescription = "Add to Playlist"
+                            )
+                        }
                     }
                 }
             }
-            Card(
-                shape = RoundedCornerShape(8.dp),
-                onClick = {},
-            ) {
-                Row(
-                    modifier = Modifier
-                        .padding(10.dp, 10.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
+            for (i in 1..5) {
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    onClick = {},
                 ) {
+                    Row(
+                        modifier = Modifier
+                            .padding(10.dp, 10.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
 
-                    Column(Modifier.padding(12.dp, 0.dp)) {
-                        Text(
-                            text = "Rija Rasolondraibe",
-                            style = MaterialTheme.typography.body1,
-                        )
-                        Text(text = "Hira 59", style = MaterialTheme.typography.caption)
+                        Column(Modifier.padding(12.dp, 0.dp)) {
+                            Text(
+                                text = "Rija Rasolondraibe",
+                                style = MaterialTheme.typography.body1,
+                            )
+                            Text(text = "Hira 59", style = MaterialTheme.typography.caption)
+                        }
                     }
                 }
             }
@@ -590,7 +608,6 @@ fun SongsScreen() {
 }
 
 @Composable
-@Preview(showBackground = true)
 fun SongScreen() {
     Column(
         modifier = Modifier
@@ -651,62 +668,64 @@ fun PlaylistScreen() {
             }
         }
         Column(modifier = Modifier.fillMaxSize()) {
-            Row {
-                Button(
-                    modifier = Modifier.size(64.dp),
-                    onClick = {},
-                    elevation = null,
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.DragHandle,
-                        tint = MaterialTheme.colors.secondary,
-                        contentDescription = "Go",
-                        modifier = Modifier.size(32.dp)
-                    )
-                }
-                Column(
-                    Modifier
-                        .padding(12.dp, 0.dp)
-                        .weight(1f), Arrangement.Center
-                ) {
-                    Text(
-                        text = "Feno Fiderana",
-                        style = MaterialTheme.typography.subtitle1,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(text = "Key: G", style = MaterialTheme.typography.caption)
-                }
+            for (i in 1..5) {
+                Row {
+                    Button(
+                        modifier = Modifier.size(64.dp),
+                        onClick = {},
+                        elevation = null,
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.DragHandle,
+                            tint = MaterialTheme.colors.secondary,
+                            contentDescription = "Go",
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+                    Column(
+                        Modifier
+                            .padding(12.dp, 0.dp)
+                            .weight(1f), Arrangement.Center
+                    ) {
+                        Text(
+                            text = "Feno Fiderana",
+                            style = MaterialTheme.typography.subtitle1,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(text = "Key: G", style = MaterialTheme.typography.caption)
+                    }
 
-                Button(
-                    modifier = Modifier.size(64.dp),
-                    onClick = {},
-                    elevation = null,
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.PlayCircle,
-                        tint = MaterialTheme.colors.secondary,
-                        contentDescription = "Play",
-                        modifier = Modifier.size(32.dp)
-                    )
-                }
+                    Button(
+                        modifier = Modifier.size(64.dp),
+                        onClick = {},
+                        elevation = null,
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.PlayCircle,
+                            tint = MaterialTheme.colors.secondary,
+                            contentDescription = "Play",
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
 
-                Button(
-                    modifier = Modifier.size(64.dp),
-                    onClick = {},
-                    elevation = null,
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.RemoveCircle,
-                        tint = MaterialTheme.colors.secondary,
-                        contentDescription = "Go",
-                        modifier = Modifier.size(32.dp)
-                    )
+                    Button(
+                        modifier = Modifier.size(64.dp),
+                        onClick = {},
+                        elevation = null,
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.RemoveCircle,
+                            tint = MaterialTheme.colors.secondary,
+                            contentDescription = "Go",
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
                 }
             }
         }
@@ -714,7 +733,6 @@ fun PlaylistScreen() {
 }
 
 @ExperimentalMaterialApi
-@Preview(showBackground = true)
 @Composable
 fun CategoryScreen() {
     Column(
@@ -726,7 +744,8 @@ fun CategoryScreen() {
         Box(
             modifier = Modifier
                 .padding(10.dp)
-                .background(Color.Cyan, shape = RoundedCornerShape(8.dp)).height(IntrinsicSize.Min)
+                .background(Color.Cyan, shape = RoundedCornerShape(8.dp))
+                .height(IntrinsicSize.Min)
                 .clickable { }
         ) {
             Image(
