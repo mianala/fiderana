@@ -184,7 +184,6 @@ fun DialNumber(n: Int, dialViewModel: Dial = viewModel()) {
             text = n.toString(),
             textAlign = TextAlign.Center,
             fontSize = 24.sp,
-            fontWeight = FontWeight.Light
         )
     }
 }
@@ -204,10 +203,42 @@ fun DialScreen(dialViewModel: Dial = viewModel()) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp),
-            horizontalArrangement = Arrangement.End,
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.padding(0.dp, 10.dp)
+            ) {
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                    elevation = null
+                ) {
+                    Text(text = "HF", fontWeight = FontWeight.Black)
+                }
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                    elevation = null
+                ) {
+                    Text(text = "FFPM", fontWeight = FontWeight.Light)
+                }
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                    elevation = null
+                ) {
+                    Text(text = "FF", fontWeight = FontWeight.Light)
+                }
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                    elevation = null
+                ) {
+                    Text(text = "Antema", fontWeight = FontWeight.Light)
+                }
+            }
             Button(
                 onClick = { /*TODO*/ },
                 shape = CircleShape,
@@ -231,79 +262,36 @@ fun DialScreen(dialViewModel: Dial = viewModel()) {
             }
             Column(
                 Modifier
-                    .padding(32.dp, 24.dp)
                     .weight(1f)
                     .verticalScroll(rememberScrollState())
-                    .wrapContentHeight(), Arrangement.spacedBy(14.dp)
+                    .wrapContentHeight()
             ) {
 
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    backgroundColor = MaterialTheme.colors.primaryVariant,
-                    onClick = {},
+                Column(
+                    Modifier
+                        .padding(32.dp, 24.dp), Arrangement.spacedBy(14.dp)
+                ) {
 
-                    ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(10.dp, 10.dp)
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-
-                        Column(
-                            Modifier.padding(12.dp, 0.dp),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(text = "3", fontSize = 28.sp)
-                        }
-                        Column(
-                            Modifier
-                                .padding(12.dp, 0.dp)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "Feno Fiderana",
-                                style = MaterialTheme.typography.subtitle1,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(text = "Key: G", style = MaterialTheme.typography.caption)
-                        }
-                        Button(
-                            onClick = { /*TODO*/ },
-                            elevation = null,
-                            shape = CircleShape,
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.PlaylistAdd,
-                                contentDescription = "Add to Playlist"
-                            )
-                        }
-                    }
-                }
-                for (i in 1..5) {
                     Card(
                         shape = RoundedCornerShape(8.dp),
+                        backgroundColor = MaterialTheme.colors.primaryVariant,
                         onClick = {},
-                    ) {
+
+                        ) {
                         Row(
                             modifier = Modifier
                                 .padding(10.dp, 10.dp)
                                 .fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-
-                            ) {
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
 
                             Column(
-                                Modifier
-                                    .padding(12.dp, 0.dp),
+                                Modifier.padding(12.dp, 0.dp),
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(text = "385", fontSize = 28.sp)
+                                Text(text = "3", fontSize = 28.sp)
                             }
                             Column(
                                 Modifier
@@ -311,9 +299,9 @@ fun DialScreen(dialViewModel: Dial = viewModel()) {
                                     .weight(1f)
                             ) {
                                 Text(
-                                    text = "Injay Tompo o Ilay Feonao",
+                                    text = "Feno Fiderana",
                                     style = MaterialTheme.typography.subtitle1,
-                                    fontWeight = FontWeight.Bold,
+                                    fontWeight = FontWeight.Bold
                                 )
                                 Text(text = "Key: G", style = MaterialTheme.typography.caption)
                             }
@@ -330,8 +318,56 @@ fun DialScreen(dialViewModel: Dial = viewModel()) {
                             }
                         }
                     }
-                }
+                    for (i in 1..5) {
+                        Card(
+                            shape = RoundedCornerShape(8.dp),
+                            onClick = {},
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .padding(10.dp, 10.dp)
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
 
+                                ) {
+
+                                Column(
+                                    Modifier
+                                        .padding(12.dp, 0.dp),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(text = "385", fontSize = 28.sp)
+                                }
+                                Column(
+                                    Modifier
+                                        .padding(12.dp, 0.dp)
+                                        .weight(1f)
+                                ) {
+                                    Text(
+                                        text = "Injay Tompo o Ilay Feonao",
+                                        style = MaterialTheme.typography.subtitle1,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                    Text(text = "Key: G", style = MaterialTheme.typography.caption)
+                                }
+                                Button(
+                                    onClick = { /*TODO*/ },
+                                    elevation = null,
+                                    shape = CircleShape,
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.PlaylistAdd,
+                                        contentDescription = "Add to Playlist"
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                }
             }
 
 
@@ -409,39 +445,7 @@ fun DialScreen(dialViewModel: Dial = viewModel()) {
                     }
                 }
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier.padding(0.dp, 10.dp)
-                ) {
-                    Button(
-                        onClick = { /*TODO*/ },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                        elevation = null
-                    ) {
-                        Text(text = "HF", fontWeight = FontWeight.Black)
-                    }
-                    Button(
-                        onClick = { /*TODO*/ },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                        elevation = null
-                    ) {
-                        Text(text = "FFPM")
-                    }
-                    Button(
-                        onClick = { /*TODO*/ },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                        elevation = null
-                    ) {
-                        Text(text = "FF")
-                    }
-                    Button(
-                        onClick = { /*TODO*/ },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                        elevation = null
-                    ) {
-                        Text(text = "Antema")
-                    }
-                }
+
             }
         }
     }
@@ -735,55 +739,62 @@ fun PlaylistScreen() {
 @ExperimentalMaterialApi
 @Composable
 fun CategoryScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp, 32.dp)
-    ) {
+    Column(Modifier.verticalScroll(rememberScrollState())) {
 
-        Box(
+        Column(
             modifier = Modifier
-                .padding(10.dp)
-                .background(Color.Cyan, shape = RoundedCornerShape(8.dp))
-                .height(IntrinsicSize.Min)
-                .clickable { }
-        ) {
-            Image(
-                modifier = Modifier
-                    .width(224.dp)
-                    .align(alignment = Alignment.TopEnd)
-                    .offset(y = -88.dp, x = 50.dp),
-                painter = painterResource(id = R.drawable.ic_pray),
-                contentDescription = null,
-            )
-            Box(modifier = Modifier.wrapContentHeight()) {
+                .fillMaxWidth()
+                .padding(12.dp, 32.dp)
 
-                Column(
-                    Modifier
-                        .padding(24.dp)
-                        .padding(end = 100.dp), verticalArrangement = Arrangement.SpaceEvenly
+        ) {
+            for (i in 1..5) {
+                Box(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .background(Color.Cyan, shape = RoundedCornerShape(8.dp))
+                        .height(IntrinsicSize.Min)
+                        .clickable { }
                 ) {
-                    Text(
-                        text = "Fiderana sy Fanandratana",
-                        style = MaterialTheme.typography.h6,
-                    )
-                    Text(
-                        text = "Hira 50",
-                        style = MaterialTheme.typography.caption,
+                    Image(
                         modifier = Modifier
-                            .padding(0.dp, 10.dp)
+                            .width(224.dp)
+                            .align(alignment = Alignment.TopEnd)
+                            .offset(y = -88.dp, x = 50.dp),
+                        painter = painterResource(id = R.drawable.ic_pray),
+                        contentDescription = null,
                     )
-                    Text(
-                        text = "Fo midera an'Andriamanitra ary mifaly aminy",
-                        style = MaterialTheme.typography.body2,
-                    )
+                    Box(modifier = Modifier.wrapContentHeight()) {
+
+                        Column(
+                            Modifier
+                                .padding(24.dp)
+                                .padding(end = 100.dp),
+                            verticalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            Text(
+                                text = "Fiderana sy Fanandratana",
+                                style = MaterialTheme.typography.h6,
+                            )
+                            Text(
+                                text = "Hira 50",
+                                style = MaterialTheme.typography.caption,
+                                modifier = Modifier
+                                    .padding(0.dp, 10.dp)
+                            )
+                            Text(
+                                text = "Fo midera an'Andriamanitra ary mifaly aminy",
+                                style = MaterialTheme.typography.body2,
+                            )
+
+                        }
+                    }
 
                 }
             }
-
         }
     }
 }
+
 
 @Composable
 fun SettingsScreen() {
