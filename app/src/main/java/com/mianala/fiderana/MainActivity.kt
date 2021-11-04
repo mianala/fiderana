@@ -470,12 +470,12 @@ fun AuthorComponent() {
 fun SongsScreen() {
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp, 10.dp),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(14.dp),
         Alignment.CenterHorizontally
     ) {
-        Row(
+        Row(modifier = Modifier
+                .padding(24.dp, 10.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -493,11 +493,13 @@ fun SongsScreen() {
                 )
             }
         }
+        Column(Modifier
+            .weight(1f)
+            .verticalScroll(rememberScrollState())
+            .wrapContentHeight()){
         Column(
             Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
-                .wrapContentHeight(),
+                .padding(24.dp, 10.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
 
             ) {
@@ -606,7 +608,7 @@ fun SongsScreen() {
                 }
             }
         }
-
+        }
 
     }
 }
@@ -623,7 +625,7 @@ fun SongScreen() {
         Text(
             text = "Tsy moramora ny mankatoa " +
                     "\n Manefy ny sitrapo " +
-                    "\n Manda ny tena koa", style = MaterialTheme.typography.body1
+                    "\n Manda ny tena koa", fontSize = 24.sp
         )
         Text(
             text = "Tsy moramora ny mankatoa " +
@@ -744,7 +746,7 @@ fun CategoryScreen() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp, 32.dp)
+                .padding(12.dp, 32.dp), Arrangement.spacedBy(16.dp)
 
         ) {
             for (i in 1..5) {
@@ -759,7 +761,7 @@ fun CategoryScreen() {
                         modifier = Modifier
                             .width(224.dp)
                             .align(alignment = Alignment.TopEnd)
-                            .offset(y = -88.dp, x = 50.dp),
+                            .offset(y = -68.dp, x = 50.dp),
                         painter = painterResource(id = R.drawable.ic_pray),
                         contentDescription = null,
                     )
