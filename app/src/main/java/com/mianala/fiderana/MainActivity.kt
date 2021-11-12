@@ -615,38 +615,40 @@ fun SongsScreen() {
 
 @Composable
 fun SongScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp), Arrangement.spacedBy(10.dp)
-    ) {
-        Text(text = "Title", style = MaterialTheme.typography.h3)
-        Text(text = "HN5 - T130", style = MaterialTheme.typography.caption)
-        Text(
-            text = "Tsy moramora ny mankatoa " +
-                    "\n Manefy ny sitrapo " +
-                    "\n Manda ny tena koa", fontSize = 24.sp
-        )
-        Text(
-            text = "Tsy moramora ny mankatoa " +
-                    "\n Manefy ny sitrapo " +
-                    "\n Manda ny tena koa", style = MaterialTheme.typography.body1
-        )
-        Text(
-            text = "Tsy moramora ny mankatoa " +
-                    "\n Manefy ny sitrapo " +
-                    "\n Manda ny tena koa", style = MaterialTheme.typography.body1
-        )
-        Text(
-            text = "Tsy moramora ny mankatoa " +
-                    "\n Manefy ny sitrapo " +
-                    "\n Manda ny tena koa", style = MaterialTheme.typography.body1
-        )
-        Text(
-            text = "Tsy moramora ny mankatoa " +
-                    "\n Manefy ny sitrapo " +
-                    "\n Manda ny tena koa", style = MaterialTheme.typography.body1
-        )
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp), Arrangement.spacedBy(10.dp)
+        ) {
+            Text(text = "Title", style = MaterialTheme.typography.h3)
+            Text(text = "HN5 - T130", style = MaterialTheme.typography.body1)
+            Text(
+                text = "Tsy moramora ny mankatoa " +
+                        "\n Manefy ny sitrapo " +
+                        "\n Manda ny tena koa", fontSize = 24.sp
+            )
+            Text(
+                text = "Tsy moramora ny mankatoa " +
+                        "\n Manefy ny sitrapo " +
+                        "\n Manda ny tena koa", fontSize = 24.sp
+            )
+            Text(
+                text = "Tsy moramora ny mankatoa " +
+                        "\n Manefy ny sitrapo " +
+                        "\n Manda ny tena koa", fontSize = 24.sp
+            )
+            Text(
+                text = "Tsy moramora ny mankatoa " +
+                        "\n Manefy ny sitrapo " +
+                        "\n Manda ny tena koa", fontSize = 24.sp
+            )
+            Text(
+                text = "Tsy moramora ny mankatoa " +
+                        "\n Manefy ny sitrapo " +
+                        "\n Manda ny tena koa", fontSize = 24.sp
+            )
+        }
     }
 }
 
