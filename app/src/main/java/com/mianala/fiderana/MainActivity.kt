@@ -678,9 +678,8 @@ fun PlaylistScreen() {
                 }
 
                 DropdownMenu(expanded = expanded, 
-             onDismissRequest = {
-               expanded = false
-             }){
+                    onDismissRequest = {expanded = false}
+                    ){
                     Text("Popup content \nhere", Modifier.padding(24.dp))
                 }
             }
