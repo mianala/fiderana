@@ -655,6 +655,7 @@ fun SongScreen() {
 @Composable
 fun PlaylistScreen() {
     Column {
+        var expanded by remember { mutableStateOf(false)}
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -662,20 +663,31 @@ fun PlaylistScreen() {
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Column{
+                
+                Button(
+                    onClick = { expanded = !expanded },
+                    shape = CircleShape,
+                    elevation = null,
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.MoreHoriz,
+                        contentDescription = "Add to playlist"
+                    )
+                }
 
-            Button(
-                onClick = { /*TODO*/ },
-                shape = CircleShape,
-                elevation = null,
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.MoreHoriz,
-                    contentDescription = "Add to playlist"
-                )
+                DropdownMenu(expanded = expanded, 
+             onDismissRequest = {
+               expanded = false
+             }){
+                    Text("Popup content \nhere", Modifier.padding(24.dp))
+                }
             }
+
+
         }
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
             for (i in 1..5) {
                 Row {
                     Button(
