@@ -695,7 +695,7 @@ fun PlaylistScreen() {
                     Column(
                         Modifier
                             .padding(12.dp, 0.dp)
-                            .weight(1f), Arrangement.Center
+                            .weight(1f), Arrangement.Center, alignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = "Feno Fiderana",
