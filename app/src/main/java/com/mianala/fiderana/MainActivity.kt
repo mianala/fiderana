@@ -126,6 +126,7 @@ fun NavigationBar(
     }
 }
 
+
 @ExperimentalMaterialApi
 @Composable
 fun Navigation(navController: NavHostController) {
@@ -167,6 +168,74 @@ class Dial : ViewModel() {
     fun reset() {
         _inputFlow.value = 0
     }
+}
+
+class Lyric(val content:String, val part:String)
+
+class SongHeader (
+    val id:Int = 0,
+    val authorId:Int = 0,
+    // verses are in numbers and choruses are in C Ex: V1-C-V2-C2-A-V3-C-B
+    val arrangement:String = "",
+    val key:String = "",
+)
+
+class PlaylistSong( var played:Boolean = false){
+
+    fun markAsPlayed(){
+        played = true
+    }
+}
+
+class Song (
+    val id:Int = 0,
+    val authorId:Int = 0,
+    // verses are in numbers and choruses are in C Ex: V1-C-V2-C2-A-V3-C-B
+    val arrangement:String = "",
+    val lyrics: List<Lyric> = emptyList(),
+    val key:String = "",
+
+)
+
+class SongViewModel : ViewModel() {
+    private val _songs = MutableStateFlow<List<Song>>(emptyList())
+    private val _playlistSongs = MutableStateFlow<List<PlaylistSong>>(emptyList())
+//    private val _playingSong = MutableStateFlow<Song>()
+    val songs: StateFlow<List<Song>> = _songs
+    val playlistSongs: StateFlow<List<PlaylistSong>> = _playlistSongs
+//    val playingSong:StateFlow<Song> = new Song()
+
+    fun sing(num: Int) {
+    }
+
+    fun search(num: Int) {
+    }
+
+    fun filter(num: Int) {
+    }
+
+    fun getSongsFromDatabase(num: Int) {
+    }
+
+    fun addToPlaylist(id: Int) {
+        val songToAdd = PlaylistSong()
+        val previousPlaylist = _playlistSongs.value
+        _playlistSongs.value = previousPlaylist + songToAdd
+    }
+    fun markAsPlayed(id: Int) {
+
+        val songToMarkAsPlayed = PlaylistSong()
+//        playlistSongs.add(songToAdd)
+    }
+
+    fun removeFromPlaylist(id: Int) {
+    }
+}
+
+class PlaylistViewModel:ViewModel(){
+    private val _songs = MutableStateFlow<List<Song>>(emptyList())
+    //    private val _playingSong = MutableStateFlow<Song>()
+    val songs: StateFlow<List<Song>> = _songs
 }
 
 @Composable
