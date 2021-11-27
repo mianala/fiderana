@@ -28,7 +28,6 @@ data class Author(
     @ColumnInfo(name = "name") val name: String,
 )
 
-
 @Entity
 data class Song(
     @PrimaryKey(autoGenerate = true) val uid: Int?,
@@ -44,7 +43,6 @@ data class Song(
 interface SongDao {
     @Insert
     fun insert(song: Song)
-
 
     @Query("SELECT * FROM song")
     fun getAll(): Flow<List<Song>>
@@ -104,7 +102,7 @@ interface LyricDao {
     fun delete(lyric: Lyric)
 }
 
-@Database(entities = [Lyric::class], version = 1)
+@Database(entities = [Lyric::class, Song::class, Category::class, Author::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun lyricDao(): LyricDao
     abstract fun songDao(): SongDao
