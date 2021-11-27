@@ -1,6 +1,9 @@
 package com.mianala.fiderana
 
+import android.app.Application
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.*
@@ -26,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,7 +40,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.room.*
 import com.mianala.fiderana.ui.theme.FideranaTheme
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -45,6 +51,17 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val database by lazy {AppDatabase.getDatabase(application)}
+        val lyricDao = database.lyricDao()
+
+        var lyric1 = Lyric(-1,"content","part", 3 )
+        lyricDao.insert(lyric1)
+
+        val allSongs = lyricDao.getAll()
+        Log.d("tag",allSongs.toString())
+
+
         setContent {
             FideranaTheme {
                 // A surface container using the 'background' color from the theme
@@ -170,8 +187,6 @@ class Dial : ViewModel() {
     }
 }
 
-class Lyric(val content:String, val part:String)
-
 class SongHeader (
     val id:Int = 0,
     val authorId:Int = 0,
@@ -187,21 +202,16 @@ class PlaylistSong( var played:Boolean = false){
     }
 }
 
-class Song (
-    val id:Int = 0,
-    val authorId:Int = 0,
-    // verses are in numbers and choruses are in C Ex: V1-C-V2-C2-A-V3-C-B
-    val arrangement:String = "",
-    val lyrics: List<Lyric> = emptyList(),
-    val key:String = "",
+class SongViewModel(application:Application) : AndroidViewModel(application) {
+    val database by lazy {AppDatabase.getDatabase(application)}
+    val lyricDao = database.lyricDao()
 
-)
 
-class SongViewModel : ViewModel() {
-    private val _songs = MutableStateFlow<List<Song>>(emptyList())
+//    private val _songs = MutableStateFlow<List<Song>>(emptyList())
     private val _playlistSongs = MutableStateFlow<List<PlaylistSong>>(emptyList())
 //    private val _playingSong = MutableStateFlow<Song>()
-    val songs: StateFlow<List<Song>> = _songs
+    val songs: Flow<List<Lyric>> = lyricDao.getAll()
+
     val playlistSongs: StateFlow<List<PlaylistSong>> = _playlistSongs
 //    val playingSong:StateFlow<Song> = new Song()
 
@@ -215,6 +225,7 @@ class SongViewModel : ViewModel() {
     }
 
     fun getSongsFromDatabase(num: Int) {
+
     }
 
     fun addToPlaylist(id: Int) {
@@ -912,5 +923,74 @@ fun AuthorsScreen() {
         contentAlignment = Alignment.Center
     ) {
         Text("Authors")
+    }
+}
+
+@Entity
+data class Lyric(
+    @PrimaryKey(autoGenerate = true) val uid:Int,
+    @ColumnInfo(name = "content") val content:String,
+    @ColumnInfo(name = "part") val part:String,
+    @ColumnInfo(name = "song_id") val songId:Int,
+)
+
+@Entity
+data class Author(
+    @PrimaryKey(autoGenerate = true) val uid:Int,
+    @ColumnInfo(name = "name") val name:String,
+)
+
+@Entity
+data class Song(
+    @PrimaryKey(autoGenerate = true) val uid:Int,
+    @ColumnInfo(name = "title") val title:String,
+    @ColumnInfo(name = "structure") val structure:String,
+    @ColumnInfo(name = "author_id") val authorId:Int,
+    @ColumnInfo(name = "lowest") val lowest:Int,
+    @ColumnInfo(name = "highest") val highest:Int,
+    @ColumnInfo(name = "tempo") val tempo:Int,
+)
+
+@Dao
+interface LyricDao{
+    @Query("SELECT * FROM lyric")
+    fun getAll(): Flow<List<Lyric>>
+
+    @Query("SELECT * FROM lyric WHERE song_id = :songId")
+    fun findBySongId(songId:Int): List<Lyric>
+
+    @Insert
+    fun insertAll(vararg lyrics:Lyric)
+
+    @Insert
+    fun insert(lyric:Lyric)
+
+    @Delete
+    fun delete(lyric:Lyric)
+}
+
+@Database(entities = [Lyric::class], version = 1)
+abstract class AppDatabase:RoomDatabase(){
+    abstract fun lyricDao():LyricDao
+    companion object {
+        // Singleton prevents multiple instances of database opening at the
+        // same time.
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
+
+        fun getDatabase(context: Context): AppDatabase {
+            // if the INSTANCE is not null, then return it,
+            // if it is, then create the database
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "hira-fiderana-database"
+                ).allowMainThreadQueries().build()
+                INSTANCE = instance
+                // return instance
+                instance
+            }
+        }
     }
 }
