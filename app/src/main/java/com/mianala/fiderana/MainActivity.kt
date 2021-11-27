@@ -52,14 +52,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val database by lazy {AppDatabase.getDatabase(application)}
+        val database by lazy { AppDatabase.getDatabase(application) }
         val lyricDao = database.lyricDao()
 
-        var lyric1 = Lyric(-1,"content","part", 3 )
+        var lyric1 = Lyric(-1, "content", "part", 3)
         lyricDao.insert(lyric1)
 
         val allSongs = lyricDao.getAll()
-        Log.d("tag",allSongs.toString())
+        Log.d("tag", allSongs.toString())
 
 
         setContent {
@@ -187,29 +187,30 @@ class Dial : ViewModel() {
     }
 }
 
-class SongHeader (
-    val id:Int = 0,
-    val authorId:Int = 0,
+class SongHeader(
+    val id: Int = 0,
+    val authorId: Int = 0,
     // verses are in numbers and choruses are in C Ex: V1-C-V2-C2-A-V3-C-B
-    val arrangement:String = "",
-    val key:String = "",
+    val arrangement: String = "",
+    val key: String = "",
 )
 
-class PlaylistSong( var played:Boolean = false){
+class PlaylistSong(var played: Boolean = false) {
 
-    fun markAsPlayed(){
+    fun markAsPlayed() {
         played = true
     }
 }
 
-class SongViewModel(application:Application) : AndroidViewModel(application) {
-    val database by lazy {AppDatabase.getDatabase(application)}
+class SongViewModel(application: Application) : AndroidViewModel(application) {
+    val database by lazy { AppDatabase.getDatabase(application) }
     val lyricDao = database.lyricDao()
 
 
-//    private val _songs = MutableStateFlow<List<Song>>(emptyList())
+    //    private val _songs = MutableStateFlow<List<Song>>(emptyList())
     private val _playlistSongs = MutableStateFlow<List<PlaylistSong>>(emptyList())
-//    private val _playingSong = MutableStateFlow<Song>()
+
+    //    private val _playingSong = MutableStateFlow<Song>()
     val songs: Flow<List<Lyric>> = lyricDao.getAll()
 
     val playlistSongs: StateFlow<List<PlaylistSong>> = _playlistSongs
@@ -233,6 +234,7 @@ class SongViewModel(application:Application) : AndroidViewModel(application) {
         val previousPlaylist = _playlistSongs.value
         _playlistSongs.value = previousPlaylist + songToAdd
     }
+
     fun markAsPlayed(id: Int) {
 
         val songToMarkAsPlayed = PlaylistSong()
@@ -243,8 +245,9 @@ class SongViewModel(application:Application) : AndroidViewModel(application) {
     }
 }
 
-class PlaylistViewModel:ViewModel(){
+class PlaylistViewModel : ViewModel() {
     private val _songs = MutableStateFlow<List<Song>>(emptyList())
+
     //    private val _playingSong = MutableStateFlow<Song>()
     val songs: StateFlow<List<Song>> = _songs
 }
@@ -554,7 +557,8 @@ fun SongsScreen() {
         verticalArrangement = Arrangement.spacedBy(14.dp),
         Alignment.CenterHorizontally
     ) {
-        Row(modifier = Modifier
+        Row(
+            modifier = Modifier
                 .padding(24.dp, 10.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -573,121 +577,123 @@ fun SongsScreen() {
                 )
             }
         }
-        Column(Modifier
-            .weight(1f)
-            .verticalScroll(rememberScrollState())
-            .wrapContentHeight()){
         Column(
             Modifier
-                .padding(24.dp, 10.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+                .wrapContentHeight()
+        ) {
+            Column(
+                Modifier
+                    .padding(24.dp, 10.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp),
 
-            ) {
-            for (i in 1..5) {
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    onClick = {},
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(10.dp, 10.dp)
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                for (i in 1..5) {
+                    Card(
+                        shape = RoundedCornerShape(8.dp),
+                        onClick = {},
                     ) {
+                        Row(
+                            modifier = Modifier
+                                .padding(10.dp, 10.dp)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
 
-                        Column(
-                            Modifier.padding(12.dp, 0.dp),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(text = "3", fontSize = 28.sp)
+                            Column(
+                                Modifier.padding(12.dp, 0.dp),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(text = "3", fontSize = 28.sp)
+                            }
+                            Column(
+                                Modifier
+                                    .padding(12.dp, 0.dp)
+                                    .weight(1f)
+                            ) {
+                                Text(
+                                    text = "Feno Fiderana",
+                                    style = MaterialTheme.typography.body1,
+                                )
+                                Text(text = "Key: G", style = MaterialTheme.typography.caption)
+                            }
+                            Button(
+                                onClick = { /*TODO*/ },
+                                elevation = null,
+                                shape = CircleShape,
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.PlaylistAdd,
+                                    contentDescription = "Add to Playlist"
+                                )
+                            }
                         }
-                        Column(
-                            Modifier
-                                .padding(12.dp, 0.dp)
-                                .weight(1f)
+                    }
+                }
+                for (i in 1..5) {
+                    Card(
+                        shape = RoundedCornerShape(8.dp),
+                        onClick = {},
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .padding(10.dp, 10.dp)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Text(
-                                text = "Feno Fiderana",
-                                style = MaterialTheme.typography.body1,
-                            )
-                            Text(text = "Key: G", style = MaterialTheme.typography.caption)
+
+                            Column(Modifier.padding(12.dp, 0.dp)) {
+                                Text(
+                                    text = "Injay Tompo o Ilay Feonao",
+                                    style = MaterialTheme.typography.body1,
+                                )
+                                Text(
+                                    text = "Rija Rasolondraibe",
+                                    style = MaterialTheme.typography.caption
+                                )
+                            }
+                            Button(
+                                onClick = { /*TODO*/ },
+                                elevation = null,
+                                shape = CircleShape,
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.PlaylistAdd,
+                                    contentDescription = "Add to Playlist"
+                                )
+                            }
                         }
-                        Button(
-                            onClick = { /*TODO*/ },
-                            elevation = null,
-                            shape = CircleShape,
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                    }
+                }
+                for (i in 1..5) {
+                    Card(
+                        shape = RoundedCornerShape(8.dp),
+                        onClick = {},
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .padding(10.dp, 10.dp)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Icon(
-                                imageVector = Icons.Filled.PlaylistAdd,
-                                contentDescription = "Add to Playlist"
-                            )
+
+                            Column(Modifier.padding(12.dp, 0.dp)) {
+                                Text(
+                                    text = "Rija Rasolondraibe",
+                                    style = MaterialTheme.typography.body1,
+                                )
+                                Text(text = "Hira 59", style = MaterialTheme.typography.caption)
+                            }
                         }
                     }
                 }
             }
-            for (i in 1..5) {
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    onClick = {},
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(10.dp, 10.dp)
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-
-                        Column(Modifier.padding(12.dp, 0.dp)) {
-                            Text(
-                                text = "Injay Tompo o Ilay Feonao",
-                                style = MaterialTheme.typography.body1,
-                            )
-                            Text(
-                                text = "Rija Rasolondraibe",
-                                style = MaterialTheme.typography.caption
-                            )
-                        }
-                        Button(
-                            onClick = { /*TODO*/ },
-                            elevation = null,
-                            shape = CircleShape,
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.PlaylistAdd,
-                                contentDescription = "Add to Playlist"
-                            )
-                        }
-                    }
-                }
-            }
-            for (i in 1..5) {
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    onClick = {},
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(10.dp, 10.dp)
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-
-                        Column(Modifier.padding(12.dp, 0.dp)) {
-                            Text(
-                                text = "Rija Rasolondraibe",
-                                style = MaterialTheme.typography.body1,
-                            )
-                            Text(text = "Hira 59", style = MaterialTheme.typography.caption)
-                        }
-                    }
-                }
-            }
-        }
         }
 
     }
@@ -695,7 +701,7 @@ fun SongsScreen() {
 
 @Composable
 fun SongScreen() {
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())){
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -796,7 +802,7 @@ fun CategoryScreen() {
 @Preview
 fun PlaylistScreen() {
     Column {
-        var expanded by remember { mutableStateOf(false)}
+        var expanded by remember { mutableStateOf(false) }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -804,7 +810,7 @@ fun PlaylistScreen() {
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column{
+            Column {
 
                 Button(
                     onClick = { expanded = !expanded },
@@ -819,19 +825,25 @@ fun PlaylistScreen() {
                 }
 
                 DropdownMenu(expanded = expanded,
-                    onDismissRequest = {expanded = false}
-                ){
+                    onDismissRequest = { expanded = false }
+                ) {
                     Text("Popup content \nhere", Modifier.padding(24.dp))
                 }
             }
 
 
         }
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
             for (i in 1..5) {
-                Row (verticalAlignment = Alignment.CenterVertically){
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Button(
-                        modifier = Modifier.size(64.dp).align(alignment = Alignment.CenterVertically),
+                        modifier = Modifier
+                            .size(64.dp)
+                            .align(alignment = Alignment.CenterVertically),
                         onClick = {},
                         elevation = null,
                         shape = CircleShape,
@@ -858,7 +870,9 @@ fun PlaylistScreen() {
                     }
 
                     Button(
-                        modifier = Modifier.size(64.dp).align(alignment = Alignment.CenterVertically),
+                        modifier = Modifier
+                            .size(64.dp)
+                            .align(alignment = Alignment.CenterVertically),
                         onClick = {},
                         elevation = null,
                         shape = CircleShape,
@@ -874,7 +888,9 @@ fun PlaylistScreen() {
                     }
 
                     Button(
-                        modifier = Modifier.size(64.dp).align(alignment = Alignment.CenterVertically),
+                        modifier = Modifier
+                            .size(64.dp)
+                            .align(alignment = Alignment.CenterVertically),
                         onClick = {},
                         elevation = null,
                         shape = CircleShape,
@@ -928,50 +944,97 @@ fun AuthorsScreen() {
 
 @Entity
 data class Lyric(
-    @PrimaryKey(autoGenerate = true) val uid:Int,
-    @ColumnInfo(name = "content") val content:String,
-    @ColumnInfo(name = "part") val part:String,
-    @ColumnInfo(name = "song_id") val songId:Int,
+    @PrimaryKey(autoGenerate = true) val uid: Int,
+    @ColumnInfo(name = "content") val content: String,
+    @ColumnInfo(name = "part") val part: String,
+    @ColumnInfo(name = "song_id") val songId: Int,
+)
+
+@Entity
+data class Category(
+    @PrimaryKey(autoGenerate = true) val uid: Int,
+    @ColumnInfo(name = "title") val title: String,
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "icon") val icon: String,
+    @ColumnInfo(name = "color") val color: String,
+)
+
+@Entity
+data class SongCategory(
+    @PrimaryKey(autoGenerate = true) val uid: Int,
+    @ColumnInfo(name = "songId") val songId: Int,
+    @ColumnInfo(name = "categoryId") val categoryId: Int,
 )
 
 @Entity
 data class Author(
-    @PrimaryKey(autoGenerate = true) val uid:Int,
-    @ColumnInfo(name = "name") val name:String,
+    @PrimaryKey(autoGenerate = true) val uid: Int,
+    @ColumnInfo(name = "name") val name: String,
 )
+
 
 @Entity
 data class Song(
-    @PrimaryKey(autoGenerate = true) val uid:Int,
-    @ColumnInfo(name = "title") val title:String,
-    @ColumnInfo(name = "structure") val structure:String,
-    @ColumnInfo(name = "author_id") val authorId:Int,
-    @ColumnInfo(name = "lowest") val lowest:Int,
-    @ColumnInfo(name = "highest") val highest:Int,
-    @ColumnInfo(name = "tempo") val tempo:Int,
+    @PrimaryKey(autoGenerate = true) val uid: Int,
+    @ColumnInfo(name = "title") val title: String,
+    @ColumnInfo(name = "structure") val structure: String,
+    @ColumnInfo(name = "author_id") val authorId: Int,
+    @ColumnInfo(name = "lowest") val lowest: Int,
+    @ColumnInfo(name = "highest") val highest: Int,
+    @ColumnInfo(name = "tempo") val tempo: Int,
 )
 
 @Dao
-interface LyricDao{
+interface SongDao {
+    @Insert
+    fun insert(song: Song)
+
+
+    @Query("SELECT * FROM song")
+    fun getAll(): Flow<List<Song>>
+
+    @Query("SELECT * FROM song WHERE uid IN (:songIds)")
+    fun getAllByIds(songIds:IntArray): Flow<List<Song>>
+}
+
+@Dao
+interface CategoryDao {
+    @Insert
+    fun insert(category: Category)
+
+    @Query("SELECT * FROM category")
+    fun getAll(): Flow<List<Category>>
+
+    @Query(
+        "SELECT songcategory.songId " +
+                "FROM category, songcategory " +
+                "WHERE category.uid = songcategory.categoryId AND category.uid = :categoryId"
+    )
+    fun getCagetorySongIds(categoryId:Int): Flow<List<Song>>
+}
+
+@Dao
+interface LyricDao {
     @Query("SELECT * FROM lyric")
     fun getAll(): Flow<List<Lyric>>
 
     @Query("SELECT * FROM lyric WHERE song_id = :songId")
-    fun findBySongId(songId:Int): List<Lyric>
+    fun findBySongId(songId: Int): List<Lyric>
 
     @Insert
-    fun insertAll(vararg lyrics:Lyric)
+    fun insertAll(vararg lyrics: Lyric)
 
     @Insert
-    fun insert(lyric:Lyric)
+    fun insert(lyric: Lyric)
 
     @Delete
-    fun delete(lyric:Lyric)
+    fun delete(lyric: Lyric)
 }
 
 @Database(entities = [Lyric::class], version = 1)
-abstract class AppDatabase:RoomDatabase(){
-    abstract fun lyricDao():LyricDao
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun lyricDao(): LyricDao
+
     companion object {
         // Singleton prevents multiple instances of database opening at the
         // same time.
