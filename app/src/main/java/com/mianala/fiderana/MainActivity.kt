@@ -2,7 +2,6 @@ package com.mianala.fiderana
 
 import android.app.Application
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.*
@@ -45,18 +44,14 @@ class MainActivity : ComponentActivity() {
         val database by lazy { AppDatabase.getDatabase(application) }
         val lyricDao = database.lyricDao()
 
-        var lyric1 = Lyric(null, "content", "part", 3)
-        var song1 = Song(null, "Song title", authorId = 3, highest = "A2", lowest = "C4", structure = "ABABB", tempo = 120)
-        var author1 = Author(null, name = "Author")
-        var category1 = Category(null, title = "Category" , description = "Category Description", color = "RED", icon = "menu")
-        database.lyricDao().insert(lyric1)
-        database.categoryDao().insert(category1)
-        database.authorDao().insert(author1)
-        database.songDao().insert(song1)
-
-        val allSongs = lyricDao.getAll()
-        Log.d("tag", allSongs.toString())
-
+//        var lyric1 = Lyric(null, "Second content", "part", 3)
+//        var song1 = Song(null, "Second Song title", authorId = 3, highest = "A2", lowest = "C4", structure = "ABABB", tempo = 120)
+//        var author1 = Author(null, name = "Second Author")
+//        var category1 = Category(null, title = "Second Category" , description = "Category Description", color = "RED", icon = "menu")
+//        database.lyricDao().insert(lyric1)
+//        database.categoryDao().insert(category1)
+//        database.authorDao().insert(author1)
+//        database.songDao().insert(song1)
 
         setContent {
             FideranaTheme {
@@ -168,7 +163,7 @@ fun Navigation(navController: NavHostController) {
     }
 }
 
-class Dial : ViewModel() {
+class DialViewModel : ViewModel() {
     private val _inputFlow = MutableStateFlow<Int>(0)
     val inputFlow: StateFlow<Int> = _inputFlow
 
@@ -198,16 +193,27 @@ class PlaylistSong(var played: Boolean = false) {
     }
 }
 
+class CategoryViewModel(application: Application):AndroidViewModel(application) {
+    val database by lazy { AppDatabase.getDatabase(application) }
+    val categoryDao = database.categoryDao()
+    val categories = categoryDao.getAll()
+}
+
+class AuthorViewModel(application: Application):AndroidViewModel(application) {
+    val database by lazy { AppDatabase.getDatabase(application) }
+    val authorDao = database.authorDao()
+    val authors = authorDao.getAll()
+}
+
 class SongViewModel(application: Application) : AndroidViewModel(application) {
     val database by lazy { AppDatabase.getDatabase(application) }
-    val lyricDao = database.lyricDao()
-
+    val songDao = database.songDao()
 
     //    private val _songs = MutableStateFlow<List<Song>>(emptyList())
     private val _playlistSongs = MutableStateFlow<List<PlaylistSong>>(emptyList())
 
     //    private val _playingSong = MutableStateFlow<Song>()
-    val songs: Flow<List<Lyric>> = lyricDao.getAll()
+    val songs: Flow<List<Song>> = songDao.getAll()
 
     val playlistSongs: StateFlow<List<PlaylistSong>> = _playlistSongs
 //    val playingSong:StateFlow<Song> = new Song()
@@ -219,10 +225,6 @@ class SongViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun filter(num: Int) {
-    }
-
-    fun getSongsFromDatabase(num: Int) {
-
     }
 
     fun addToPlaylist(id: Int) {
@@ -249,7 +251,7 @@ class PlaylistViewModel : ViewModel() {
 }
 
 @Composable
-fun DialNumber(n: Int, dialViewModel: Dial = viewModel()) {
+fun DialNumber(n: Int, dialViewModel: DialViewModel = viewModel()) {
     Button(
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
@@ -270,7 +272,7 @@ fun DialNumber(n: Int, dialViewModel: Dial = viewModel()) {
 @ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
-fun DialScreen(dialViewModel: Dial = viewModel()) {
+fun DialScreen(dialViewModel: DialViewModel = viewModel()) {
     val dialInput by dialViewModel.inputFlow.collectAsState()
 
     Column(
@@ -546,7 +548,9 @@ fun AuthorComponent() {
 
 @ExperimentalMaterialApi
 @Composable
-fun SongsScreen() {
+fun SongsScreen(songViewModel:SongViewModel = viewModel(), authorViewModel: AuthorViewModel = viewModel()) {
+    val songs by songViewModel.songs.collectAsState(initial = emptyList())
+    val authors by authorViewModel.authors.collectAsState(initial = emptyList())
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -562,7 +566,7 @@ fun SongsScreen() {
             OutlinedTextField(value = "", onValueChange = {},
                 label = { Text("Hira") })
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {  },
                 shape = CircleShape,
                 elevation = null,
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
@@ -585,7 +589,7 @@ fun SongsScreen() {
                 verticalArrangement = Arrangement.spacedBy(14.dp),
 
                 ) {
-                for (i in 1..5) {
+                songs.forEach{
                     Card(
                         shape = RoundedCornerShape(8.dp),
                         onClick = {},
@@ -611,7 +615,7 @@ fun SongsScreen() {
                                     .weight(1f)
                             ) {
                                 Text(
-                                    text = "Feno Fiderana",
+                                    text = it.title,
                                     style = MaterialTheme.typography.body1,
                                 )
                                 Text(text = "Key: G", style = MaterialTheme.typography.caption)
@@ -630,7 +634,7 @@ fun SongsScreen() {
                         }
                     }
                 }
-                for (i in 1..5) {
+                songs.forEach{
                     Card(
                         shape = RoundedCornerShape(8.dp),
                         onClick = {},
@@ -645,7 +649,7 @@ fun SongsScreen() {
 
                             Column(Modifier.padding(12.dp, 0.dp)) {
                                 Text(
-                                    text = "Injay Tompo o Ilay Feonao",
+                                    text = it.title,
                                     style = MaterialTheme.typography.body1,
                                 )
                                 Text(
@@ -667,7 +671,7 @@ fun SongsScreen() {
                         }
                     }
                 }
-                for (i in 1..5) {
+                authors.forEach {
                     Card(
                         shape = RoundedCornerShape(8.dp),
                         onClick = {},
@@ -681,7 +685,7 @@ fun SongsScreen() {
 
                             Column(Modifier.padding(12.dp, 0.dp)) {
                                 Text(
-                                    text = "Rija Rasolondraibe",
+                                    text = it.name,
                                     style = MaterialTheme.typography.body1,
                                 )
                                 Text(text = "Hira 59", style = MaterialTheme.typography.caption)
@@ -736,7 +740,8 @@ fun SongScreen() {
 
 @ExperimentalMaterialApi
 @Composable
-fun CategoryScreen() {
+fun CategoryScreen(categoryViewModel: CategoryViewModel = viewModel()) {
+    val categories by categoryViewModel.categories.collectAsState(initial = emptyList())
     Column(Modifier.verticalScroll(rememberScrollState())) {
 
         Column(
@@ -745,12 +750,13 @@ fun CategoryScreen() {
                 .padding(12.dp, 32.dp), Arrangement.spacedBy(16.dp)
 
         ) {
-            for (i in 1..5) {
+            categories.forEach {
                 Box(
                     modifier = Modifier
                         .padding(10.dp)
                         .background(Color.Cyan, shape = RoundedCornerShape(8.dp))
                         .height(IntrinsicSize.Min)
+                        .fillMaxWidth()
                         .clickable { }
                 ) {
                     Image(
@@ -770,7 +776,7 @@ fun CategoryScreen() {
                             verticalArrangement = Arrangement.SpaceEvenly
                         ) {
                             Text(
-                                text = "Fiderana sy Fanandratana",
+                                text = it.title,
                                 style = MaterialTheme.typography.h6,
                             )
                             Text(
@@ -780,7 +786,7 @@ fun CategoryScreen() {
                                     .padding(0.dp, 10.dp)
                             )
                             Text(
-                                text = "Fo midera an'Andriamanitra ary mifaly aminy",
+                                text = it.description,
                                 style = MaterialTheme.typography.body2,
                             )
 

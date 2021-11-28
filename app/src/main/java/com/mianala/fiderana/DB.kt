@@ -28,15 +28,31 @@ data class Author(
     @ColumnInfo(name = "name") val name: String,
 )
 
+val songBooks = listOf("HF", "FFPM", "FF", "Antema")
+
 @Entity
 data class Song(
     @PrimaryKey(autoGenerate = true) val uid: Int?,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "structure") val structure: String,
     @ColumnInfo(name = "author_id") val authorId: Int,
+    @ColumnInfo(name = "number") val number: Int,
+    @ColumnInfo(name = "song_book_id") val songBookId: String,
     @ColumnInfo(name = "lowest") val lowest: String,
     @ColumnInfo(name = "highest") val highest: String,
     @ColumnInfo(name = "tempo") val tempo: Int,
+)
+
+@DatabaseView()
+data class SongDetail(
+    val title: String,
+    val author: String,
+)
+
+@DatabaseView()
+data class AuthorDetail(
+    val title: String,
+    val author: String,
 )
 
 @Dao
@@ -48,14 +64,10 @@ interface SongDao {
     fun getAll(): Flow<List<Song>>
 
     @Query("SELECT * FROM song WHERE uid IN (:songIds)")
-    fun getAllByIds(songIds:IntArray): Flow<List<Song>>
+    fun getAllByIds(songIds: IntArray): Flow<List<Song>>
 
-    @Query(
-        "SELECT * " +
-                "FROM song, author " +
-                "WHERE author.uid = song.author_id AND author.uid = :authorId"
-    )
-    fun getAuthorSongs(authorId:Int): Flow<List<Song>>
+    @Query("SELECT * FROM song WHERE song.uid = :authorId")
+    fun getAuthorSongs(authorId: Int): Flow<List<Song>>
 }
 
 @Dao
@@ -123,6 +135,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "hira-fiderana-database"
+                    /*TODO remove allowMainThreadQueries*/
                 ).allowMainThreadQueries().build()
                 INSTANCE = instance
                 // return instance
