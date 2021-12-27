@@ -88,39 +88,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun NavigationBar(
-    items: List<NavItem>,
-    navController: NavController,
-    modifier: Modifier = Modifier,
-    onItemclick: (NavItem) -> Unit
-) {
-    val backStackEntry = navController.currentBackStackEntryAsState()
-
-    BottomNavigation(
-        modifier = modifier,
-        backgroundColor = Color.White,
-        elevation = 5.dp
-    ) {
-        items.forEach { item ->
-            val selected = item.route == backStackEntry.value?.destination?.route
-            BottomNavigationItem(
-                selected = selected,
-                onClick = { onItemclick(item) },
-                selectedContentColor = MaterialTheme.colors.primaryVariant,
-                unselectedContentColor = Color.DarkGray,
-                icon = {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = item.name,
-                        modifier = Modifier.size(32.dp)
-                    )
-                }
-            )
-
-        }
-    }
-}
 
 
 
@@ -209,31 +176,4 @@ class PlaylistViewModel : ViewModel() {
 
     //    private val _playingSong = MutableStateFlow<Song>()
     val songs: StateFlow<List<Song>> = _songs
-}
-
-
-@Composable
-fun AuthorComponent() {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Box() {
-            Text(text = "RI")
-        }
-        Column {
-            Text("Rija Rasolondraibe")
-            Text("Hira 40")
-        }
-    }
-}
-
-
-
-
-@Composable
-fun AuthorsScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("Authors")
-    }
 }
