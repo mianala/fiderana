@@ -3,6 +3,8 @@ package com.mianala.fiderana
 import android.app.Application
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -32,18 +34,17 @@ class CategoryViewModel(application: Application): AndroidViewModel(application)
 @Composable
 fun CategoryScreen(categoryViewModel: CategoryViewModel = viewModel(), navController: NavController) {
     val categories by categoryViewModel.categories.collectAsState(initial = emptyList())
-    Column(Modifier.verticalScroll(rememberScrollState())) {
+    Column() {
 
-        Column(
+        LazyColumn(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp, 32.dp), Arrangement.spacedBy(16.dp)
+                .fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)
 
         ) {
-            categories.forEach {
+            items(categories.toList()) {
                 Box(
                     modifier = Modifier
-                        .padding(10.dp)
+                        .padding(16.dp)
                         .background(Color.Cyan, shape = RoundedCornerShape(8.dp))
                         .height(IntrinsicSize.Min)
                         .fillMaxWidth()
