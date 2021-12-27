@@ -1,5 +1,6 @@
 package com.mianala.fiderana
 
+import android.app.Application
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -17,13 +18,56 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+
+class SongsViewModel(application: Application) : AndroidViewModel(application) {
+    val database by lazy { AppDatabase.getDatabase(application) }
+    val songDao = database.songDao()
+
+    //    private val _songs = MutableStateFlow<List<Song>>(emptyList())
+    private val _playlistSongs = MutableStateFlow<List<PlaylistSong>>(emptyList())
+
+    //    private val _playingSong = MutableStateFlow<Song>()
+    val songs: Flow<List<Song>> = songDao.getAll()
+
+    val playlistSongs: StateFlow<List<PlaylistSong>> = _playlistSongs
+//    val playingSong:StateFlow<Song> = new Song()
+
+    fun sing(num: Int) {
+    }
+
+    fun search(num: Int) {
+    }
+
+    fun filter(num: Int) {
+    }
+
+    fun addToPlaylist(id: Int) {
+        val songToAdd = PlaylistSong()
+        val previousPlaylist = _playlistSongs.value
+        _playlistSongs.value = previousPlaylist + songToAdd
+    }
+
+    fun markAsPlayed(id: Int) {
+
+        val songToMarkAsPlayed = PlaylistSong()
+//        playlistSongs.add(songToAdd)
+    }
+
+    fun removeFromPlaylist(id: Int) {
+    }
+}
 
 
 @ExperimentalMaterialApi
 @Composable
-fun SongsScreen(songViewModel:SongViewModel = viewModel(), authorViewModel: AuthorViewModel = viewModel()) {
-    val songs by songViewModel.songs.collectAsState(initial = emptyList())
+fun SongsScreen(songsViewModel:SongsViewModel = viewModel(), authorViewModel: AuthorViewModel = viewModel()) {
+    val songs by songsViewModel.songs.collectAsState(initial = emptyList())
     val authors by authorViewModel.authors.collectAsState(initial = emptyList())
     Column(
         modifier = Modifier

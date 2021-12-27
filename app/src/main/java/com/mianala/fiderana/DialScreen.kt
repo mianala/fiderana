@@ -18,11 +18,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
+
+class DialViewModel : ViewModel() {
+    private val _inputFlow = MutableStateFlow<Int>(0)
+    val inputFlow: StateFlow<Int> = _inputFlow
+
+    fun type(num: Int) {
+        val newNumber = (_inputFlow.value.toString() + num.toString()).toInt()
+        if (newNumber > 999) return
+        _inputFlow.value = newNumber
+    }
+
+    fun reset() {
+        _inputFlow.value = 0
+    }
+}
 
 @Composable
 fun DialNumber(n: Int, dialViewModel: DialViewModel = viewModel()) {

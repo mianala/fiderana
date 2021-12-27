@@ -17,6 +17,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+
+class PlaylistSong(var played: Boolean = false) {
+
+    fun markAsPlayed() {
+        played = true
+    }
+}
+
+class PlaylistViewModel : ViewModel() {
+    private val _songs = MutableStateFlow<List<Song>>(emptyList())
+
+    //    private val _playingSong = MutableStateFlow<Song>()
+    val songs: StateFlow<List<Song>> = _songs
+}
 
 
 @Composable
