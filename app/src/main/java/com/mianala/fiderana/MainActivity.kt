@@ -97,10 +97,3 @@ class SongHeader(
     val key: String = "",
 )
 
-
-class CategoryViewModel(application: Application):AndroidViewModel(application) {
-    val database by lazy { AppDatabase.getDatabase(application) }
-    val categoryDao = database.categoryDao()
-    val categories = categoryDao.getAll()
-}
-

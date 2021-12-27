@@ -1,5 +1,6 @@
 package com.mianala.fiderana
 
+import android.app.Application
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,7 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+
+
+class CategoryViewModel(application: Application): AndroidViewModel(application) {
+    val database by lazy { AppDatabase.getDatabase(application) }
+    val categoryDao = database.categoryDao()
+    val categories = categoryDao.getAll()
+}
+
 
 
 @ExperimentalMaterialApi

@@ -2,6 +2,8 @@ package com.mianala.fiderana
 
 import android.app.Application
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +17,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -66,48 +70,43 @@ class SongsViewModel(application: Application) : AndroidViewModel(application) {
 
 @ExperimentalMaterialApi
 @Composable
-fun SongsScreen(songsViewModel:SongsViewModel = viewModel(), authorViewModel: AuthorViewModel = viewModel()) {
+fun SongsScreen(
+    songsViewModel: SongsViewModel = viewModel(),
+    authorViewModel: AuthorViewModel = viewModel()
+) {
     val songs by songsViewModel.songs.collectAsState(initial = emptyList())
     val authors by authorViewModel.authors.collectAsState(initial = emptyList())
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
-        Alignment.CenterHorizontally
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(24.dp, 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            OutlinedTextField(value = "", onValueChange = {},
-                label = { Text("Hira") })
-            Button(
-                onClick = {  },
-                shape = CircleShape,
-                elevation = null,
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.MoreHoriz,
-                    contentDescription = "Add to playlist"
-                )
-            }
-        }
-        Column(
-            Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
-                .wrapContentHeight()
-        ) {
-            Column(
-                Modifier
-                    .padding(24.dp, 10.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp),
 
+    Column() {
+        Column(Modifier.padding(10.dp,0.dp)) {
+            Row(
+                modifier = Modifier
+                    .padding(10.dp, 10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                OutlinedTextField(modifier = Modifier.focusRequester(FocusRequester()), value = "", onValueChange = {},
+                    label = { Text("Hira") })
+                Button(
+                    onClick = { },
+                    shape = CircleShape,
+                    elevation = null,
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
                 ) {
-                songs.forEach{
+                    Icon(
+                        imageVector = Icons.Filled.MoreHoriz,
+                        contentDescription = "Add to playlist"
+                    )
+                }
+            }
+            LazyColumn(
+                Modifier
+                    .wrapContentHeight()
+                    .fillMaxSize().wrapContentHeight(),
+                verticalArrangement = Arrangement.spacedBy(14.dp),
+            ) {
+
+                items(songs.toList()) {
                     Card(
                         shape = RoundedCornerShape(8.dp),
                         onClick = {},
@@ -152,7 +151,8 @@ fun SongsScreen(songsViewModel:SongsViewModel = viewModel(), authorViewModel: Au
                         }
                     }
                 }
-                songs.forEach{
+                items(authors.toList()) {
+
                     Card(
                         shape = RoundedCornerShape(8.dp),
                         onClick = {},
@@ -167,7 +167,7 @@ fun SongsScreen(songsViewModel:SongsViewModel = viewModel(), authorViewModel: Au
 
                             Column(Modifier.padding(12.dp, 0.dp)) {
                                 Text(
-                                    text = it.title,
+                                    text = "Title",
                                     style = MaterialTheme.typography.body1,
                                 )
                                 Text(
@@ -189,7 +189,7 @@ fun SongsScreen(songsViewModel:SongsViewModel = viewModel(), authorViewModel: Au
                         }
                     }
                 }
-                authors.forEach {
+                items(authors.toList()) {
                     Card(
                         shape = RoundedCornerShape(8.dp),
                         onClick = {},
@@ -211,8 +211,9 @@ fun SongsScreen(songsViewModel:SongsViewModel = viewModel(), authorViewModel: Au
                         }
                     }
                 }
+
             }
         }
-
     }
+
 }
