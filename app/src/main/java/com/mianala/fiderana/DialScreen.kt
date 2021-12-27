@@ -1,6 +1,8 @@
 package com.mianala.fiderana
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,23 +30,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 
-class DialViewModel : ViewModel() {
-    private val _inputFlow = MutableStateFlow<Int>(0)
-    val inputFlow: StateFlow<Int> = _inputFlow
-
-    fun type(num: Int) {
-        val newNumber = (_inputFlow.value.toString() + num.toString()).toInt()
-        if (newNumber > 999) return
-        _inputFlow.value = newNumber
-    }
-
-    fun reset() {
-        _inputFlow.value = 0
-    }
-}
-
 @Composable
-fun DialNumber(n: Int, dialViewModel: DialViewModel = viewModel()) {
+fun DialNumber(n: Int,songsViewModel: SongsViewModel = viewModel()) {
     Button(
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
@@ -52,7 +39,7 @@ fun DialNumber(n: Int, dialViewModel: DialViewModel = viewModel()) {
             contentColor = Color.Black
         ),
         modifier = Modifier.size(64.dp),
-        onClick = { dialViewModel.type(n) }
+        onClick = { songsViewModel.type(n) }
     ) {
         Text(
             text = n.toString(),
@@ -62,66 +49,74 @@ fun DialNumber(n: Int, dialViewModel: DialViewModel = viewModel()) {
     }
 }
 
+@Composable
+fun DialTop(){
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.padding(0.dp, 10.dp)
+        ) {
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                elevation = null
+            ) {
+                Text(text = "HF", fontWeight = FontWeight.Black)
+            }
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                elevation = null
+            ) {
+                Text(text = "FFPM", fontWeight = FontWeight.Light)
+            }
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                elevation = null
+            ) {
+                Text(text = "FF", fontWeight = FontWeight.Light)
+            }
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                elevation = null
+            ) {
+                Text(text = "Antema", fontWeight = FontWeight.Light)
+            }
+        }
+        Button(
+            onClick = { /*TODO*/ },
+            shape = CircleShape,
+            elevation = null,
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+        ) {
+            Icon(imageVector = Icons.Filled.MoreHoriz, contentDescription = "Add to playlist")
+        }
+    }
+}
+
 @ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
-fun DialScreen(dialViewModel: DialViewModel = viewModel()) {
-    val dialInput by dialViewModel.inputFlow.collectAsState()
+fun DialScreen(
+    songsViewModel: SongsViewModel = viewModel()
+) {
+    val dialInput by songsViewModel.inputFlow.collectAsState()
+    val songs by songsViewModel.filteredSongbookSongs.collectAsState(initial = emptyList())
 
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.padding(0.dp, 10.dp)
-            ) {
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                    elevation = null
-                ) {
-                    Text(text = "HF", fontWeight = FontWeight.Black)
-                }
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                    elevation = null
-                ) {
-                    Text(text = "FFPM", fontWeight = FontWeight.Light)
-                }
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                    elevation = null
-                ) {
-                    Text(text = "FF", fontWeight = FontWeight.Light)
-                }
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                    elevation = null
-                ) {
-                    Text(text = "Antema", fontWeight = FontWeight.Light)
-                }
-            }
-            Button(
-                onClick = { /*TODO*/ },
-                shape = CircleShape,
-                elevation = null,
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-            ) {
-                Icon(imageVector = Icons.Filled.MoreHoriz, contentDescription = "Add to playlist")
-            }
-        }
+        DialTop()
         Column(
             modifier = Modifier
                 .padding(0.dp, 20.dp)
@@ -137,62 +132,67 @@ fun DialScreen(dialViewModel: DialViewModel = viewModel()) {
             Column(
                 Modifier
                     .weight(1f)
-                    .verticalScroll(rememberScrollState())
                     .wrapContentHeight()
+                    .padding(0.dp, 24.dp)
             ) {
 
-                Column(
+                LazyColumn(
                     Modifier
-                        .padding(32.dp, 24.dp), Arrangement.spacedBy(14.dp)
+                        .padding(10.dp, 24.dp), verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
+                    // Primary songs
+                    item {
+                        Card(
+                            shape = RoundedCornerShape(8.dp),
+                            backgroundColor = MaterialTheme.colors.primaryVariant,
+                            onClick = {},
 
-                    Card(
-                        shape = RoundedCornerShape(8.dp),
-                        backgroundColor = MaterialTheme.colors.primaryVariant,
-                        onClick = {},
+                            ) {
+                            Row(
+                                modifier = Modifier
+                                    .padding(10.dp, 10.dp)
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
 
-                        ) {
-                        Row(
-                            modifier = Modifier
-                                .padding(10.dp, 10.dp)
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-
-                            Column(
-                                Modifier.padding(12.dp, 0.dp),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(text = "3", fontSize = 28.sp)
-                            }
-                            Column(
-                                Modifier
-                                    .padding(12.dp, 0.dp)
-                                    .weight(1f)
-                            ) {
-                                Text(
-                                    text = "Feno Fiderana",
-                                    style = MaterialTheme.typography.subtitle1,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(text = "Key: G", style = MaterialTheme.typography.caption)
-                            }
-                            Button(
-                                onClick = { /*TODO*/ },
-                                elevation = null,
-                                shape = CircleShape,
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.PlaylistAdd,
-                                    contentDescription = "Add to Playlist"
-                                )
+                                Column(
+                                    Modifier.padding(12.dp, 0.dp),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(text = "3", fontSize = 28.sp)
+                                }
+                                Column(
+                                    Modifier
+                                        .padding(12.dp, 0.dp)
+                                        .weight(1f)
+                                ) {
+                                    Text(
+                                        text = "Feno Fiderana",
+                                        style = MaterialTheme.typography.subtitle1,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(text = "Key: G", style = MaterialTheme.typography.caption)
+                                }
+                                Button(
+                                    onClick = { /*TODO*/ },
+                                    elevation = null,
+                                    shape = CircleShape,
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.PlaylistAdd,
+                                        contentDescription = "Add to Playlist"
+                                    )
+                                }
                             }
                         }
                     }
-                    for (i in 1..5) {
+
+
+                    // related songs
+                    items(songs.toList()) {
                         Card(
                             shape = RoundedCornerShape(8.dp),
                             onClick = {},
@@ -212,7 +212,7 @@ fun DialScreen(dialViewModel: DialViewModel = viewModel()) {
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    Text(text = "385", fontSize = 28.sp)
+                                    Text(text = it.numberInSongbook.toString(), fontSize = 28.sp)
                                 }
                                 Column(
                                     Modifier
@@ -220,7 +220,7 @@ fun DialScreen(dialViewModel: DialViewModel = viewModel()) {
                                         .weight(1f)
                                 ) {
                                     Text(
-                                        text = "Injay Tompo o Ilay Feonao",
+                                        text = it.title,
                                         style = MaterialTheme.typography.subtitle1,
                                         fontWeight = FontWeight.Bold,
                                     )
@@ -244,80 +244,85 @@ fun DialScreen(dialViewModel: DialViewModel = viewModel()) {
                 }
             }
 
+            DialNumbers()
 
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+        }
+    }
+}
+
+@Composable
+fun DialNumbers(
+    songsViewModel: SongsViewModel = viewModel(),
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
+            DialNumber(
+                1
+            )
+            DialNumber(
+                2
+            )
+            DialNumber(
+                3
+            )
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
+            DialNumber(
+                4
+            )
+            DialNumber(
+                5
+            )
+            DialNumber(
+                6
+            )
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
+            DialNumber(
+                7
+            )
+            DialNumber(
+                8
+            )
+            DialNumber(
+                9
+            )
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
+
+            Button(
+                modifier = Modifier.size(64.dp),
+                onClick = { songsViewModel.reset() },
+                elevation = null,
+                shape = CircleShape,
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
             ) {
-                Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
-                    DialNumber(
-                        1
-                    )
-                    DialNumber(
-                        2
-                    )
-                    DialNumber(
-                        3
-                    )
-                }
-                Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
-                    DialNumber(
-                        4
-                    )
-                    DialNumber(
-                        5
-                    )
-                    DialNumber(
-                        6
-                    )
-                }
-                Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
-                    DialNumber(
-                        7
-                    )
-                    DialNumber(
-                        8
-                    )
-                    DialNumber(
-                        9
-                    )
-                }
-                Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
-
-                    Button(
-                        modifier = Modifier.size(64.dp),
-                        onClick = { dialViewModel.reset() },
-                        elevation = null,
-                        shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Refresh,
-                            contentDescription = "Go",
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
-                    DialNumber(
-                        0
-                    )
-                    Button(
-                        modifier = Modifier.size(64.dp),
-                        onClick = {},
-                        elevation = null,
-                        shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Check,
-                            tint = MaterialTheme.colors.secondary,
-                            contentDescription = "Go",
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
-                }
-
-
+                Icon(
+                    imageVector = Icons.Filled.Refresh,
+                    contentDescription = "Go",
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+            DialNumber(
+                0
+            )
+            Button(
+                modifier = Modifier.size(64.dp),
+                onClick = {},
+                elevation = null,
+                shape = CircleShape,
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Check,
+                    tint = MaterialTheme.colors.secondary,
+                    contentDescription = "Go",
+                    modifier = Modifier.size(32.dp)
+                )
             }
         }
     }

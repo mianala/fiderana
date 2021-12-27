@@ -12,9 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.PlaylistAdd
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -37,18 +35,15 @@ class SongsViewModel(application: Application) : AndroidViewModel(application) {
     private val _playlistSongs = MutableStateFlow<List<PlaylistSong>>(emptyList())
 
     //    private val _playingSong = MutableStateFlow<Song>()
-    val songs: Flow<List<Song>> = songDao.getAll()
+    var filteredSongs: Flow<List<Song>> = songDao.getAll()
+    var filteredSongbookSongs: Flow<List<Song>> = songDao.getAllSongbookSongs()
 
-    val playlistSongs: StateFlow<List<PlaylistSong>> = _playlistSongs
-//    val playingSong:StateFlow<Song> = new Song()
-
-    fun sing(num: Int) {
+    fun searchByNumber(num: Int) {
+        this.filteredSongbookSongs = songDao.searchSongByNumber(num)
     }
 
     fun search(num: Int) {
-    }
-
-    fun filter(num: Int) {
+        this.filteredSongs = songDao.searchSong(num)
     }
 
     fun addToPlaylist(id: Int) {
@@ -57,13 +52,21 @@ class SongsViewModel(application: Application) : AndroidViewModel(application) {
         _playlistSongs.value = previousPlaylist + songToAdd
     }
 
-    fun markAsPlayed(id: Int) {
 
-        val songToMarkAsPlayed = PlaylistSong()
-//        playlistSongs.add(songToAdd)
+    //     dial functions
+    private val _inputFlow = MutableStateFlow<Int>(0)
+    val inputFlow: StateFlow<Int> = _inputFlow
+
+    fun type(num: Int) {
+        val newNumber = (_inputFlow.value.toString() + num.toString()).toInt()
+        if (newNumber > 999) return
+        _inputFlow.value = newNumber
+
+        this.filteredSongbookSongs = songDao.searchSongByNumber(newNumber)
     }
 
-    fun removeFromPlaylist(id: Int) {
+    fun reset() {
+        _inputFlow.value = 0
     }
 }
 
@@ -74,18 +77,22 @@ fun SongsScreen(
     songsViewModel: SongsViewModel = viewModel(),
     authorViewModel: AuthorViewModel = viewModel()
 ) {
-    val songs by songsViewModel.songs.collectAsState(initial = emptyList())
+    val songs by songsViewModel.filteredSongs.collectAsState(initial = emptyList())
     val authors by authorViewModel.authors.collectAsState(initial = emptyList())
 
     Column() {
-        Column(Modifier.padding(10.dp,0.dp)) {
+        Column(Modifier.padding(10.dp, 0.dp)) {
             Row(
                 modifier = Modifier
                     .padding(10.dp, 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                OutlinedTextField(modifier = Modifier.focusRequester(FocusRequester()), value = "", onValueChange = {},
+                var textFilter by remember { mutableStateOf("") }
+                OutlinedTextField(value = textFilter, onValueChange = {
+                    textFilter = it
+                    songsViewModel.search(it.toInt())
+                },
                     label = { Text("Hira") })
                 Button(
                     onClick = { },
@@ -102,7 +109,8 @@ fun SongsScreen(
             LazyColumn(
                 Modifier
                     .wrapContentHeight()
-                    .fillMaxSize().wrapContentHeight(),
+                    .fillMaxSize()
+                    .wrapContentHeight(),
                 verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
 

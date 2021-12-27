@@ -63,6 +63,15 @@ interface SongDao {
     @Query("SELECT * FROM song")
     fun getAll(): Flow<List<Song>>
 
+    @Query("SELECT * FROM song")
+    fun getAllSongbookSongs(): Flow<List<Song>>
+
+    @Query("SELECT * FROM song WHERE number_in_songbook LIKE :numberKey || '%' ORDER BY number_in_songbook")
+    fun searchSongByNumber(numberKey: Int): Flow<List<Song>>
+
+    @Query("SELECT * FROM song WHERE number_in_songbook = :numberKey")
+    fun searchSong(numberKey: Int): Flow<List<Song>>
+
     @Query("SELECT * FROM song WHERE uid IN (:songIds)")
     fun getAllByIds(songIds: IntArray): Flow<List<Song>>
 

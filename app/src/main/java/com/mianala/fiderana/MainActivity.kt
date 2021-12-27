@@ -31,15 +31,15 @@ class MainActivity : ComponentActivity() {
 
         val database by lazy { AppDatabase.getDatabase(application) }
         val lyricDao = database.lyricDao()
-
-        var lyric1 = Lyric(null, "Second content", "part", 3)
-        var song1 = Song(null, "Second Song title", authorId = 3, highest = "A2", lowest = "C4", structure = "ABABB", tempo = 120, numberInSongbook = 1, songbookId = 1)
-        var author1 = Author(null, name = "Second Author")
-        var category1 = Category(null, title = "Second Category" , description = "Category Description", color = "RED", icon = "menu")
-        database.lyricDao().insert(lyric1)
-        database.categoryDao().insert(category1)
-        database.authorDao().insert(author1)
-        database.songDao().insert(song1)
+//
+//        var lyric1 = Lyric(null, "Second content", "part", 3)
+//        var song1 = Song(null, "Second Song title", authorId = 3, highest = "A2", lowest = "C4", structure = "ABABB", tempo = 120, numberInSongbook = 1, songbookId = 1)
+//        var author1 = Author(null, name = "Second Author")
+//        var category1 = Category(null, title = "Second Category" , description = "Category Description", color = "RED", icon = "menu")
+//        database.lyricDao().insert(lyric1)
+//        database.categoryDao().insert(category1)
+//        database.authorDao().insert(author1)
+//        database.songDao().insert(song1)
 
         setContent {
             FideranaTheme {
