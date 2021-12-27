@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -75,7 +76,8 @@ class SongsViewModel(application: Application) : AndroidViewModel(application) {
 @Composable
 fun SongsScreen(
     songsViewModel: SongsViewModel = viewModel(),
-    authorViewModel: AuthorViewModel = viewModel()
+    authorViewModel: AuthorViewModel = viewModel(),
+    navController: NavController
 ) {
     val songs by songsViewModel.filteredSongs.collectAsState(initial = emptyList())
     val authors by authorViewModel.authors.collectAsState(initial = emptyList())
@@ -117,7 +119,9 @@ fun SongsScreen(
                 items(songs.toList()) {
                     Card(
                         shape = RoundedCornerShape(8.dp),
-                        onClick = {},
+                        onClick = {
+                                  navController.navigate(RoutesConstants.SONG+'/'+it.numberInSongbook.toString())
+                        },
                     ) {
                         Row(
                             modifier = Modifier

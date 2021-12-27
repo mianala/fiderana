@@ -12,17 +12,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
 
 
 @Composable
-fun SongScreen() {
+fun SongScreen(navController: NavController, backStackEntry: NavBackStackEntry) {
+    val songId = backStackEntry.arguments?.getString("songId")
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp), Arrangement.spacedBy(10.dp)
         ) {
-            Text(text = "Title", style = MaterialTheme.typography.h3)
+            Text(text = "Title $songId", style = MaterialTheme.typography.h3)
             Text(text = "HN5 - T130", style = MaterialTheme.typography.body1)
             Text(
                 text = "Tsy moramora ny mankatoa " +

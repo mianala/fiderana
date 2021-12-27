@@ -51,32 +51,36 @@ class MainActivity : ComponentActivity() {
                             items = listOf(
                                 NavItem(
                                     name = "Songs",
-                                    route = "songs",
+                                    route = RoutesConstants.SONGS,
                                     icon = Icons.Filled.Audiotrack
                                 ),
                                 NavItem(
                                     name = "Dial",
-                                    route = "dial",
+                                    route = RoutesConstants.DIAL,
                                     icon = Icons.Filled.Pin
                                 ),
                                 NavItem(
                                     name = "Song",
-                                    route = "song",
+//                                    TODO replace with stored last song
+                                    route = RoutesConstants.SONG+"/1",
                                     icon = Icons.Filled.PlayCircle
                                 ),
                                 NavItem(
                                     name = "Category",
-                                    route = "category",
+                                    route = RoutesConstants.CATEGORY,
                                     icon = Icons.Filled.EmojiPeople
                                 ),
                                 NavItem(
                                     name = "Playlist",
-                                    route = "playlist",
+                                    route = RoutesConstants.PLAYLIST,
                                     icon = Icons.Filled.PlaylistPlay
                                 ),
                             ),
                             navController = navController,
-                            onItemclick = { navController.navigate(it.route) }
+                            onItemclick = { navController.navigate(it.route){
+                                popUpTo(RoutesConstants.DIAL) { inclusive = true }
+                                launchSingleTop = true
+                            } }
                         )
                     }) { paddings ->
                     Box(modifier = Modifier.padding(bottom = paddings.calculateBottomPadding())) {

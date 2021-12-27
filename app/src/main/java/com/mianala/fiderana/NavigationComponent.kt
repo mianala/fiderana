@@ -21,16 +21,16 @@ object RoutesConstants {
 fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = RoutesConstants.DIAL) {
         composable(RoutesConstants.DIAL) {
-            DialScreen()
+            DialScreen(navController = navController)
         }
-        composable(RoutesConstants.SONG) {
-            SongScreen()
+        composable(RoutesConstants.SONG+"/{songId}") {
+            SongScreen(navController = navController, backStackEntry = it)
         }
         composable(RoutesConstants.SETTINGS) {
             SettingsScreen()
         }
         composable(RoutesConstants.CATEGORY) {
-            CategoryScreen()
+            CategoryScreen(navController = navController)
         }
         composable(RoutesConstants.PLAYLIST) {
             PlaylistScreen()
@@ -39,7 +39,7 @@ fun Navigation(navController: NavHostController) {
             AuthorsScreen()
         }
         composable(RoutesConstants.SONGS) {
-            SongsScreen()
+            SongsScreen(navController = navController)
         }
     }
 }

@@ -26,6 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -104,13 +107,13 @@ fun DialTop(){
 }
 
 @ExperimentalMaterialApi
-@Preview(showBackground = true)
 @Composable
 fun DialScreen(
-    songsViewModel: SongsViewModel = viewModel()
+    songsViewModel: SongsViewModel = viewModel(), navController: NavController
 ) {
     val dialInput by songsViewModel.inputFlow.collectAsState()
     val songs by songsViewModel.filteredSongbookSongs.collectAsState(initial = emptyList())
+
 
     Column(
         modifier = Modifier
@@ -195,7 +198,9 @@ fun DialScreen(
                     items(songs.toList()) {
                         Card(
                             shape = RoundedCornerShape(8.dp),
-                            onClick = {},
+                            onClick = {
+                                      navController.navigate(RoutesConstants.SONG+'/'+it.numberInSongbook.toString())
+                            },
                         ) {
                             Row(
                                 modifier = Modifier

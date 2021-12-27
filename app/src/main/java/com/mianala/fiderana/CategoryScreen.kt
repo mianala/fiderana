@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 
 
 class CategoryViewModel(application: Application): AndroidViewModel(application) {
@@ -29,7 +30,7 @@ class CategoryViewModel(application: Application): AndroidViewModel(application)
 
 @ExperimentalMaterialApi
 @Composable
-fun CategoryScreen(categoryViewModel: CategoryViewModel = viewModel()) {
+fun CategoryScreen(categoryViewModel: CategoryViewModel = viewModel(), navController: NavController) {
     val categories by categoryViewModel.categories.collectAsState(initial = emptyList())
     Column(Modifier.verticalScroll(rememberScrollState())) {
 
