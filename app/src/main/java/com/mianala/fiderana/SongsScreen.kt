@@ -30,48 +30,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 
-class SongsViewModel(application: Application) : AndroidViewModel(application) {
-    val database by lazy { AppDatabase.getDatabase(application) }
-    val songDao = database.songDao()
-
-    //    private val _songs = MutableStateFlow<List<Song>>(emptyList())
-    private val _playlistSongs = MutableStateFlow<List<PlaylistSong>>(emptyList())
-
-    //    private val _playingSong = MutableStateFlow<Song>()
-    var filteredSongs: Flow<List<Song>> = songDao.getAll()
-    var filteredSongbookSongs: Flow<List<Song>> = songDao.getAllSongbookSongs()
-
-
-    fun search(num: Int) {
-        this.filteredSongs = songDao.searchSong(num)
-    }
-
-    fun addToPlaylist(id: Int) {
-        val songToAdd = PlaylistSong()
-        val previousPlaylist = _playlistSongs.value
-        _playlistSongs.value = previousPlaylist + songToAdd
-    }
-
-
-    //     Dial functions
-    private val _inputFlow = MutableStateFlow<Int>(0)
-    val inputFlow: StateFlow<Int> = _inputFlow
-
-//    Dial screen church
-    fun type(num: Int) {
-        val newNumber = (_inputFlow.value.toString() + num.toString()).toInt()
-        if (newNumber > 999) return
-        _inputFlow.value = newNumber
-
-        this.filteredSongbookSongs = songDao.searchSongByNumber(newNumber)
-    }
-
-    fun reset() {
-        _inputFlow.value = 0
-    }
-}
-
-
 @ExperimentalMaterialApi
 @Composable
 fun SongsScreen(
@@ -96,7 +54,7 @@ fun SongsScreen(
                     contentDescription = "Search"
                 )}, onValueChange = {
                     textFilter = it
-                    songsViewModel.search(it.toInt())
+                    songsViewModel.search(it)
                 },
                     label = { Text("Hira") })
                 Button(
@@ -122,7 +80,7 @@ fun SongsScreen(
                     Card(
                         shape = RoundedCornerShape(8.dp),
                         onClick = {
-                             navController.navigate(RoutesConstants.SONG+'/'+it.numberInSongbook.toString())
+                             navController.navigate(RoutesConstants.SONG+'/'+it.uid.toString())
                         },
                     ) {
                         Row(
@@ -132,13 +90,14 @@ fun SongsScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-
-                            Column(
-                                Modifier.padding(12.dp, 0.dp),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(text = it.numberInSongbook.toString(), fontSize = 28.sp)
+                            if(it.numberInSongbook != null){
+                                Column(
+                                    Modifier.padding(12.dp, 0.dp),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(text = it.numberInSongbook.toString(), fontSize = 28.sp)
+                                }
                             }
                             Column(
                                 Modifier
@@ -165,66 +124,30 @@ fun SongsScreen(
                         }
                     }
                 }
-                items(authors.toList()) {
 
-                    Card(
-                        shape = RoundedCornerShape(8.dp),
-                        onClick = {},
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .padding(10.dp, 10.dp)
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-
-                            Column(Modifier.padding(12.dp, 0.dp)) {
-                                Text(
-                                    text = "Title",
-                                    style = MaterialTheme.typography.body1,
-                                )
-                                Text(
-                                    text = "Rija Rasolondraibe",
-                                    style = MaterialTheme.typography.caption
-                                )
-                            }
-                            Button(
-                                onClick = { /*TODO*/ },
-                                elevation = null,
-                                shape = CircleShape,
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.PlaylistAdd,
-                                    contentDescription = "Add to Playlist"
-                                )
-                            }
-                        }
-                    }
-                }
-                items(authors.toList()) {
-                    Card(
-                        shape = RoundedCornerShape(8.dp),
-                        onClick = {},
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .padding(10.dp, 10.dp)
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-
-                            Column(Modifier.padding(12.dp, 0.dp)) {
-                                Text(
-                                    text = it.name,
-                                    style = MaterialTheme.typography.body1,
-                                )
-                                Text(text = "Hira 59", style = MaterialTheme.typography.caption)
-                            }
-                        }
-                    }
-                }
+                //                authors
+//                items(authors.toList()) {
+//                    Card(
+//                        shape = RoundedCornerShape(8.dp),
+//                        onClick = {},
+//                    ) {
+//                        Row(
+//                            modifier = Modifier
+//                                .padding(10.dp, 10.dp)
+//                                .fillMaxWidth(),
+//                            verticalAlignment = Alignment.CenterVertically,
+//                        ) {
+//
+//                            Column(Modifier.padding(12.dp, 0.dp)) {
+//                                Text(
+//                                    text = it.name,
+//                                    style = MaterialTheme.typography.body1,
+//                                )
+//                                Text(text = "Hira 59", style = MaterialTheme.typography.caption)
+//                            }
+//                        }
+//                    }
+//                }
 
             }
         }

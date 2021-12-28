@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.Flow
 data class Lyric(
     @PrimaryKey(autoGenerate = true) val uid: Int?,
     @ColumnInfo(name = "content") val content: String,
-    @ColumnInfo(name = "part") val part: String,
+    @ColumnInfo(name = "part") val part: String?,
+    @ColumnInfo(name = "number") val number: Int?,
     @ColumnInfo(name = "song_id") val songId: Int,
 )
 
@@ -20,6 +21,13 @@ data class Category(
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "icon") val icon: String?,
     @ColumnInfo(name = "color") val color: String?,
+)
+
+@Entity
+data class Playlist(
+    @PrimaryKey(autoGenerate = true) val uid: Int?,
+    @ColumnInfo(name = "song_id") val songId: String,
+    @ColumnInfo(name = "order") val order: Int,
 )
 
 @Entity
@@ -34,13 +42,17 @@ val songBooks = listOf("HF", "FFPM", "FF", "Antema")
 data class Song(
     @PrimaryKey(autoGenerate = true) val uid: Int?,
     @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "structure") val structure: String,
-    @ColumnInfo(name = "author_id") val authorId: Int,
-    @ColumnInfo(name = "number_in_songbook") val numberInSongbook: Int,
-    @ColumnInfo(name = "songbook_id") val songbookId: Int,
-    @ColumnInfo(name = "lowest") val lowest: String,
-    @ColumnInfo(name = "highest") val highest: String,
-    @ColumnInfo(name = "tempo") val tempo: Int,
+    @ColumnInfo(name = "structure") val structure: String?,
+    @ColumnInfo(name = "author_id") val authorId: Int?,
+    @ColumnInfo(name = "number_in_songbook") val numberInSongbook: Int?,
+    @ColumnInfo(name = "songbook_id") val songbookId: Int?,
+    @ColumnInfo(name = "lowest") val lowest: String?,
+    @ColumnInfo(name = "highest") val highest: String?,
+    @ColumnInfo(name = "created_at") val created_at: String?,
+    @ColumnInfo(name = "updated_at") val updated_at: String?,
+    @ColumnInfo(name = "tempo") val tempo: Int?,
+    @ColumnInfo(name = "tags") val tags: String?,
+    @ColumnInfo(name = "added_by") val addedBy: String?,
 )
 
 @DatabaseView()
@@ -60,23 +72,32 @@ interface SongDao {
     @Insert
     fun insert(song: Song)
 
-    @Query("SELECT * FROM song")
+    @Query("SELECT * FROM song LIMIT 50")
     fun getAll(): Flow<List<Song>>
 
-    @Query("SELECT * FROM song")
+    @Query("SELECT * FROM song WHERE number_in_songbook IS NOT NULL LIMIT 50 ")
     fun getAllSongbookSongs(): Flow<List<Song>>
 
     @Query("SELECT * FROM song WHERE number_in_songbook LIKE :numberKey || '%' ORDER BY number_in_songbook")
     fun searchSongByNumber(numberKey: Int): Flow<List<Song>>
 
-    @Query("SELECT * FROM song WHERE number_in_songbook = :numberKey")
-    fun searchSong(numberKey: Int): Flow<List<Song>>
+    @Query("SELECT * FROM song WHERE title LIKE '%' || :key|| '%'")
+    fun searchSong(key: String): Flow<List<Song>>
 
     @Query("SELECT * FROM song WHERE uid IN (:songIds)")
     fun getAllByIds(songIds: IntArray): Flow<List<Song>>
 
     @Query("SELECT * FROM song WHERE song.uid = :authorId")
     fun getAuthorSongs(authorId: Int): Flow<List<Song>>
+
+    @Query("SELECT * FROM song WHERE song.uid = :songId")
+    fun getSong(songId: Int): Song
+}
+
+@Dao
+interface LyricDao{
+    @Query("SELECT * FROM lyric WHERE song_id = :songId")
+    fun getSongLyrics(songId: Int): Flow<List<Lyric>>
 }
 
 @Dao
@@ -84,7 +105,7 @@ interface CategoryDao {
     @Insert
     fun insert(category: Category)
 
-    @Query("SELECT * FROM category")
+    @Query("SELECT * FROM category LIMIT 50")
     fun getAll(): Flow<List<Category>>
 
 //    @Query(
@@ -100,27 +121,25 @@ interface AuthorDao {
     @Insert
     fun insert(author: Author)
 
-    @Query("SELECT * FROM author")
+    @Query("SELECT * FROM author LIMIT 50")
     fun getAll(): Flow<List<Author>>
 
 }
 
 @Dao
-interface LyricDao {
-    @Query("SELECT * FROM lyric")
-    fun getAll(): Flow<List<Lyric>>
-
-    @Query("SELECT * FROM lyric WHERE song_id = :songId")
-    fun findBySongId(songId: Int): List<Lyric>
-
+interface PlaylistDao {
     @Insert
-    fun insertAll(vararg lyrics: Lyric)
+    fun insert(playlist: Playlist)
 
-    @Insert
-    fun insert(lyric: Lyric)
+    @Update
+    fun update(playlist: Playlist)
 
     @Delete
-    fun delete(lyric: Lyric)
+    fun delete(playlist: Playlist)
+
+    @Query("SELECT * FROM song WHERE uid IN (SELECT song_id FROM playlist)")
+    fun getPlaylist(): Flow<List<Song>>
+
 }
 
 @Database(entities = [Lyric::class, Song::class, Category::class, Author::class], version = 1)
@@ -145,7 +164,9 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "hira-fiderana-database"
                     /*TODO remove allowMainThreadQueries*/
-                ).allowMainThreadQueries().build()
+                ).allowMainThreadQueries()
+//                    .createFromAsset("database/hf.db")
+                    .build()
                 INSTANCE = instance
                 // return instance
                 instance
