@@ -90,6 +90,7 @@ interface SongDao {
     @Query("SELECT * FROM song WHERE song.uid = :authorId")
     fun getAuthorSongs(authorId: Int): Flow<List<Song>>
 
+// TODO   why does this work? I tried and it works, shouldn't it return a list
     @Query("SELECT * FROM song WHERE song.uid = :songId")
     fun getSong(songId: Int): Song
 }
