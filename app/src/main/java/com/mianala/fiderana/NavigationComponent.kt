@@ -16,10 +16,13 @@ object RoutesConstants {
     const val SONGS = "songs"
 }
 
+
+
 @ExperimentalMaterialApi
 @Composable
 fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = RoutesConstants.DIAL) {
+//        put navController inside model
         composable(RoutesConstants.DIAL) {
             DialScreen(navController = navController)
         }

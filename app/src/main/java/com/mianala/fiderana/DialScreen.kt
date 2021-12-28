@@ -141,7 +141,7 @@ fun DialScreen(
 
                 LazyColumn(
                     Modifier
-                        .padding(10.dp, 24.dp), verticalArrangement = Arrangement.spacedBy(14.dp)
+                        .padding(10.dp, 24.dp), verticalArrangement = Arrangement.SpaceAround
                 ) {
                     // Primary songs
                     item {

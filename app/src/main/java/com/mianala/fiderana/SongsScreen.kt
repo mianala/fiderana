@@ -12,12 +12,14 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.PlaylistAdd
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.AndroidViewModel
@@ -39,9 +41,6 @@ class SongsViewModel(application: Application) : AndroidViewModel(application) {
     var filteredSongs: Flow<List<Song>> = songDao.getAll()
     var filteredSongbookSongs: Flow<List<Song>> = songDao.getAllSongbookSongs()
 
-    fun searchByNumber(num: Int) {
-        this.filteredSongbookSongs = songDao.searchSongByNumber(num)
-    }
 
     fun search(num: Int) {
         this.filteredSongs = songDao.searchSong(num)
@@ -54,10 +53,11 @@ class SongsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    //     dial functions
+    //     Dial functions
     private val _inputFlow = MutableStateFlow<Int>(0)
     val inputFlow: StateFlow<Int> = _inputFlow
 
+//    Dial screen church
     fun type(num: Int) {
         val newNumber = (_inputFlow.value.toString() + num.toString()).toInt()
         if (newNumber > 999) return
@@ -91,7 +91,10 @@ fun SongsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 var textFilter by remember { mutableStateOf("") }
-                OutlinedTextField(value = textFilter, onValueChange = {
+                OutlinedTextField(value = textFilter, leadingIcon = { Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "Search"
+                )}, onValueChange = {
                     textFilter = it
                     songsViewModel.search(it.toInt())
                 },
@@ -111,8 +114,7 @@ fun SongsScreen(
             LazyColumn(
                 Modifier
                     .wrapContentHeight()
-                    .fillMaxSize()
-                    .wrapContentHeight(),
+                    .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
 
@@ -120,7 +122,7 @@ fun SongsScreen(
                     Card(
                         shape = RoundedCornerShape(8.dp),
                         onClick = {
-                                  navController.navigate(RoutesConstants.SONG+'/'+it.numberInSongbook.toString())
+                             navController.navigate(RoutesConstants.SONG+'/'+it.numberInSongbook.toString())
                         },
                     ) {
                         Row(
