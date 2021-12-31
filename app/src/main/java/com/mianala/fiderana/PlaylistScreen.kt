@@ -108,23 +108,7 @@ fun PlaylistScreen() {
                         Text(text = "Key: G", style = MaterialTheme.typography.caption)
                     }
 
-                    Button(
-                        modifier = Modifier
-                            .size(64.dp)
-                            .align(alignment = Alignment.CenterVertically),
-                        onClick = {},
-                        elevation = null,
-                        shape = CircleShape,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-
-                        ) {
-                        Icon(
-                            imageVector = Icons.Filled.PlayCircle,
-                            tint = MaterialTheme.colors.secondary,
-                            contentDescription = "Play",
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
+//replaced
 
                     Button(
                         modifier = Modifier

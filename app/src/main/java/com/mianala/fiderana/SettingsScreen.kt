@@ -1,5 +1,7 @@
 package com.mianala.fiderana
 
+import android.app.Application
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Button
@@ -8,7 +10,39 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.AndroidViewModel
 
+
+object Settings {
+    const val FONT_SIZE_KEY = "font_size_key"
+    const val FONT_SIZE = 18
+    const val PADDING = 18
+    const val FONT_SIZE_INCREASE_VALUE = 4
+}
+
+class SettingsViewModel(application: Application) : AndroidViewModel(application) {
+    val sharedPref =
+        application.getSharedPreferences("hira_fiderana_preferences", Context.MODE_PRIVATE)
+
+    fun getFontSize(): Int {
+        sharedPref ?: return 16
+        return sharedPref.getInt(Settings.FONT_SIZE_KEY, 16)
+    }
+
+    fun increaseFontSize() {
+        with(sharedPref.edit()) {
+            putInt(Settings.FONT_SIZE_KEY, getFontSize() + Settings.FONT_SIZE_INCREASE_VALUE)
+            apply()
+        }
+    }
+
+    fun decreaseFontSize() {
+        with(sharedPref.edit()) {
+            putInt(Settings.FONT_SIZE_KEY, getFontSize() - Settings.FONT_SIZE_INCREASE_VALUE)
+            apply()
+        }
+    }
+}
 
 @Composable
 fun SettingsScreen() {
