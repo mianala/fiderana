@@ -1,6 +1,5 @@
 package com.mianala.fiderana
 
-import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,20 +7,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mianala.fiderana.ui.theme.FideranaTheme
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 class MainActivity : ComponentActivity() {
 
@@ -51,34 +39,34 @@ class MainActivity : ComponentActivity() {
                             items = listOf(
                                 NavItem(
                                     name = "Songs",
-                                    route = RoutesConstants.SONGS,
+                                    route = Routes.SONGS,
                                     icon = Icons.Filled.Audiotrack
                                 ),
                                 NavItem(
                                     name = "Dial",
-                                    route = RoutesConstants.DIAL,
+                                    route = Routes.DIAL,
                                     icon = Icons.Filled.Pin
                                 ),
                                 NavItem(
                                     name = "Song",
 //                                    TODO replace with stored last song
-                                    route = RoutesConstants.SONG+"/1",
+                                    route = Routes.SONG+"/1",
                                     icon = Icons.Filled.PlayCircle
                                 ),
                                 NavItem(
                                     name = "Category",
-                                    route = RoutesConstants.CATEGORY,
+                                    route = Routes.CATEGORY,
                                     icon = Icons.Filled.EmojiPeople
                                 ),
                                 NavItem(
                                     name = "Playlist",
-                                    route = RoutesConstants.PLAYLIST,
+                                    route = Routes.PLAYLIST,
                                     icon = Icons.Filled.PlaylistPlay
                                 ),
                             ),
                             navController = navController,
                             onItemclick = { navController.navigate(it.route){
-                                popUpTo(RoutesConstants.DIAL) { inclusive = true }
+                                popUpTo(Routes.DIAL) { inclusive = true }
                                 launchSingleTop = true
                             } }
                         )

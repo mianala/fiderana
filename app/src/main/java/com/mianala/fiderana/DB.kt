@@ -28,6 +28,7 @@ data class Playlist(
     @PrimaryKey(autoGenerate = true) val uid: Int?,
     @ColumnInfo(name = "song_id") val songId: String,
     @ColumnInfo(name = "order") val order: Int,
+    @ColumnInfo(name = "played") val played: Boolean,
 )
 
 @Entity
@@ -53,6 +54,7 @@ data class Song(
     @ColumnInfo(name = "tempo") val tempo: Int?,
     @ColumnInfo(name = "tags") val tags: String?,
     @ColumnInfo(name = "added_by") val addedBy: String?,
+    @ColumnInfo(name = "song_link") val link: String?,
 )
 
 @DatabaseView()
@@ -130,16 +132,17 @@ interface AuthorDao {
 @Dao
 interface PlaylistDao {
     @Insert
-    fun insert(playlist: Playlist)
+    fun addSong(playlist: Playlist)
 
+//    TODO updates the songs numbered bellow as played
     @Update
-    fun update(playlist: Playlist)
+    fun setCurrentSong(playlist: Playlist)
 
     @Delete
-    fun delete(playlist: Playlist)
+    fun removeSong(playlist: Playlist)
 
     @Query("SELECT * FROM song WHERE uid IN (SELECT song_id FROM playlist)")
-    fun getPlaylist(): Flow<List<Song>>
+    fun getSongs(): Flow<List<Song>>
 
 }
 
@@ -149,6 +152,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun songDao(): SongDao
     abstract fun categoryDao(): CategoryDao
     abstract fun authorDao(): AuthorDao
+    abstract fun playlistDao(): PlaylistDao
 
     companion object {
         // Singleton prevents multiple instances of database opening at the

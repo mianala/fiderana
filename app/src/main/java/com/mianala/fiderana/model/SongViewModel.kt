@@ -13,13 +13,8 @@ class SongsViewModel(application: Application) : AndroidViewModel(application) {
     val database by lazy { AppDatabase.getDatabase(application) }
     val songDao = database.songDao()
 
-    //    private val _songs = MutableStateFlow<List<Song>>(emptyList())
-    private val _playlistSongs = MutableStateFlow<List<PlaylistSong>>(emptyList())
-
-    //    private val _playingSong = MutableStateFlow<Song>()
     var filteredSongs: Flow<List<Song>> = songDao.getAll()
     var filteredSongbookSongs: Flow<List<Song>> = songDao.getAllSongbookSongs()
-
 
     fun search(key: String) {
         this.filteredSongs = songDao.searchSong(key)
@@ -28,13 +23,6 @@ class SongsViewModel(application: Application) : AndroidViewModel(application) {
     fun getSong(key: Int): Song {
         return songDao.getSong(key)
     }
-
-    fun addToPlaylist(id: Int) {
-        val songToAdd = PlaylistSong()
-        val previousPlaylist = _playlistSongs.value
-        _playlistSongs.value = previousPlaylist + songToAdd
-    }
-
 
     //     Dial functions
     private val _inputFlow = MutableStateFlow<Int>(0)

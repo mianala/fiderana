@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
-object RoutesConstants {
+object Routes {
     const val DIAL = "dial"
     const val SONG = "song"
     const val SETTINGS = "settings"
@@ -17,31 +17,30 @@ object RoutesConstants {
 }
 
 
-
 @ExperimentalMaterialApi
 @Composable
 fun Navigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = RoutesConstants.DIAL) {
+    NavHost(navController = navController, startDestination = Routes.DIAL) {
 //        put navController inside model
-        composable(RoutesConstants.DIAL) {
+        composable(Routes.DIAL) {
             DialScreen(navController = navController)
         }
-        composable(RoutesConstants.SONG+"/{songId}") {
+        composable(Routes.SONG + "/{songId}") {
             SongScreen(navController = navController, backStackEntry = it)
         }
-        composable(RoutesConstants.SETTINGS) {
+        composable(Routes.SETTINGS) {
             SettingsScreen()
         }
-        composable(RoutesConstants.CATEGORY) {
+        composable(Routes.CATEGORY) {
             CategoryScreen(navController = navController)
         }
-        composable(RoutesConstants.PLAYLIST) {
+        composable(Routes.PLAYLIST) {
             PlaylistScreen()
         }
-        composable(RoutesConstants.AUTHORS) {
+        composable(Routes.AUTHORS) {
             AuthorsScreen()
         }
-        composable(RoutesConstants.SONGS) {
+        composable(Routes.SONGS) {
             SongsScreen(navController = navController)
         }
     }

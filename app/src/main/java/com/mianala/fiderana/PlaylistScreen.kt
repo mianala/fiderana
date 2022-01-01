@@ -1,5 +1,6 @@
 package com.mianala.fiderana
 
+import android.app.Application
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -17,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +31,10 @@ class PlaylistSong(var played: Boolean = false) {
     }
 }
 
-class PlaylistViewModel : ViewModel() {
+class PlaylistViewModel(application: Application) : AndroidViewModel(application) {
+    val database by lazy { AppDatabase.getDatabase(application) }
+    val playlistDao = database.playlistDao()
+
     private val _songs = MutableStateFlow<List<Song>>(emptyList())
 
     //    private val _playingSong = MutableStateFlow<Song>()
@@ -37,11 +42,14 @@ class PlaylistViewModel : ViewModel() {
 }
 
 
+// it would be so cool if we could share the playlists with qr codes. for worshipers. for musicians
 @Composable
 @Preview
 fun PlaylistScreen() {
     Column {
         var expanded by remember { mutableStateOf(false) }
+
+//        menu
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -66,7 +74,17 @@ fun PlaylistScreen() {
                 DropdownMenu(expanded = expanded,
                     onDismissRequest = { expanded = false }
                 ) {
-                    Text("Popup content \nhere", Modifier.padding(24.dp))
+                    Button(
+                        onClick = { expanded = !expanded },
+                        shape = CircleShape,
+                        elevation = null,
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.MoreHoriz,
+                            contentDescription = "Clear"
+                        )
+                    }
                 }
             }
 
