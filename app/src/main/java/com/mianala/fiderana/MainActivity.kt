@@ -1,5 +1,6 @@
 package com.mianala.fiderana
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.Modifier
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.compose.rememberNavController
 import com.mianala.fiderana.ui.theme.FideranaTheme
 
@@ -80,12 +82,4 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-class SongHeader(
-    val id: Int = 0,
-    val authorId: Int = 0,
-    // verses are in numbers and choruses are in C Ex: V1-C-V2-C2-A-V3-C-B
-    val arrangement: String = "",
-    val key: String = "",
-)
-
+val Context.dataStore by preferencesDataStore(name = "settings")

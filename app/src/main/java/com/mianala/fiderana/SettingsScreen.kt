@@ -10,7 +10,11 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.AndroidViewModel
+import kotlinx.coroutines.flow.Flow
+import java.util.prefs.Preferences
 
 
 object Settings {
@@ -21,27 +25,7 @@ object Settings {
 }
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
-    val sharedPref =
-        application.getSharedPreferences("hira_fiderana_preferences", Context.MODE_PRIVATE)
 
-    fun getFontSize(): Int {
-        sharedPref ?: return 16
-        return sharedPref.getInt(Settings.FONT_SIZE_KEY, 16)
-    }
-
-    fun increaseFontSize() {
-        with(sharedPref.edit()) {
-            putInt(Settings.FONT_SIZE_KEY, getFontSize() + Settings.FONT_SIZE_INCREASE_VALUE)
-            apply()
-        }
-    }
-
-    fun decreaseFontSize() {
-        with(sharedPref.edit()) {
-            putInt(Settings.FONT_SIZE_KEY, getFontSize() - Settings.FONT_SIZE_INCREASE_VALUE)
-            apply()
-        }
-    }
 }
 
 @Composable
