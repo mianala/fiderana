@@ -131,18 +131,18 @@ interface AuthorDao {
 
 @Dao
 interface PlaylistDao {
-    @Insert
-    fun addSong(playlist: Playlist)
+//    @Insert
+//    fun addSong(playlist: Playlist)
+//
+////    TODO updates the songs numbered bellow as played
+//    @Update
+//    fun setCurrentSong(playlist: Playlist)
 
-//    TODO updates the songs numbered bellow as played
-    @Update
-    fun setCurrentSong(playlist: Playlist)
+//    @Delete
+//    fun removeSong(playlist: Playlist)
 
-    @Delete
-    fun removeSong(playlist: Playlist)
-
-    @Query("SELECT * FROM song WHERE uid IN (SELECT song_id FROM playlist)")
-    fun getSongs(): Flow<List<Song>>
+//    @Query("SELECT * FROM song WHERE uid IN (SELECT song_id FROM playlist)")
+//    fun getSongs(): Flow<List<Song>>
 
 }
 
